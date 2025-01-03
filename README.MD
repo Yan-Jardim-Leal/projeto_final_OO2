@@ -1,3 +1,7 @@
+## Projeto final de Orientação a Objetos 2 <br>
+Este projeto é um gerenciador de eventos, aonde você pode se registrar e participar de eventos, <br>
+enquanto os administradores criam e gerenciam eles.
+
 Parte BD: Yan Jardim Leal <br>
 Parte Dao: Yan Jardim Leal <br>
 Parte Service: Yan Jardim Leal <br>
