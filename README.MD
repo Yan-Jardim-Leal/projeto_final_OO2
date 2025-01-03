@@ -1,25 +1,26 @@
-# Parte BD: Yan Jardim Leal
-Parte Dao: Yan Jardim Leal
-Parte Service: Yan Jardim Leal
-Parte Interação com a Interface: Rafael Adonis Menon & Gabriel Capri
-Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri
+Parte BD: Yan Jardim Leal <br>
+Parte Dao: Yan Jardim Leal <br>
+Parte Service: Yan Jardim Leal <br>
+Parte Interação com a Interface: Rafael Adonis Menon & Gabriel Capri <br>
+Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 
 ## BD:
 
-CREATE TABLE usuario (
-    id SERIAL PRIMARY KEY,
-    nome_completo VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    senha VARCHAR(255) NOT NULL,
-    tipo VARCHAR(50) NOT NULL -- Tipo do usuário: 'participante' ou 'administrador'
-);
+-- Tabela de usuários
+	CREATE TABLE usuario (
+    		id SERIAL PRIMARY KEY,
+    		nome_completo VARCHAR(255) NOT NULL,
+    		email VARCHAR(255) UNIQUE NOT NULL,
+    		senha VARCHAR(255) NOT NULL,
+    		tipo VARCHAR(50) NOT NULL -- Tipo do usuário: 'participante' ou 'administrador'
+	);
 
 -- Tabela administradores
-' CREATE TABLE administrador (
-    id INT PRIMARY KEY REFERENCES usuario(id),
-    cargo VARCHAR(100) NOT NULL,
-    data_contratado DATE NOT NULL '
-);
+	CREATE TABLE administrador (
+    		id INT PRIMARY KEY REFERENCES usuario(id),
+    		cargo VARCHAR(100) NOT NULL,
+    		data_contratado DATE NOT NULL
+	);
 
 -- Tabela participantes
 ' CREATE TABLE participante (
