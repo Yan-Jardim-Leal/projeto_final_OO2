@@ -111,7 +111,5 @@ EventoManager.java ->
 
 Interface:
 
-
-==============================================================================
 FALTA:
 Criar relação DAO e SERVICE das palestras
