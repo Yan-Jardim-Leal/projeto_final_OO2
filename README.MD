@@ -1,10 +1,10 @@
 # Parte BD: Yan Jardim Leal
-# Parte Dao: Yan Jardim Leal
-# Parte Service: Yan Jardim Leal
-# Parte Interação com a Interface: Rafael Adonis Menon & Gabriel Capri
-# Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri
+Parte Dao: Yan Jardim Leal
+Parte Service: Yan Jardim Leal
+Parte Interação com a Interface: Rafael Adonis Menon & Gabriel Capri
+Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri
 
-# BD:
+## BD:
 
 CREATE TABLE usuario (
     id SERIAL PRIMARY KEY,
@@ -15,21 +15,21 @@ CREATE TABLE usuario (
 );
 
 -- Tabela administradores
-CREATE TABLE administrador (
+'CREATE TABLE administrador (
     id INT PRIMARY KEY REFERENCES usuario(id),
     cargo VARCHAR(100) NOT NULL,
-    data_contratado DATE NOT NULL
+    data_contratado DATE NOT NULL'
 );
 
 -- Tabela participantes
-CREATE TABLE participante (
+'CREATE TABLE participante (
     id INT PRIMARY KEY REFERENCES usuario(id),
     cpf VARCHAR(11) UNIQUE NOT NULL,
-    data_nascimento DATE NOT NULL
+    data_nascimento DATE NOT NULL'
 );
 
 -- Tabela eventos
-CREATE TABLE evento (
+'CREATE TABLE evento (
     id SERIAL PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     descricao TEXT,
@@ -41,24 +41,24 @@ CREATE TABLE evento (
     capacidade_maxima INT NOT NULL,
     local VARCHAR(255),
     is_link BOOLEAN NOT NULL,
-    status VARCHAR(50) -- Status do evento: 'ativo', 'cancelado', depois decide mais
+    status VARCHAR(50) -- Status do evento: 'ativo', 'cancelado', depois decide mais'
 );
 
 -- Tabela para organizadores (relação entre administrador e evento)
-CREATE TABLE organizadores (
+'CREATE TABLE organizadores (
     admin_id INT REFERENCES administrador(id),
     evento_id INT REFERENCES evento(id),
-    PRIMARY KEY (admin_id, evento_id)
+    PRIMARY KEY (admin_id, evento_id)'
 );
 
 -- Tabela para participação de participantes nos eventos
-CREATE TABLE participante_evento (
+'CREATE TABLE participante_evento (
     participante_evento_id SERIAL PRIMARY KEY,
     participante_id INT REFERENCES participante(id),
-    evento_id INT REFERENCES evento(id)
+    evento_id INT REFERENCES evento(id)'
 );
 
-DAO:
+## DAO:
 
 BancoDados.java ->
 	- conectar()
@@ -72,7 +72,7 @@ UserManagerDao.java ->
 	- User getUserPorEmail(String email)
 EventoManagerDao.java ->
 
-Service:
+## Service:
 
 UserManager.java ->
 	- boolean cadastrarUsuario(User user)
@@ -109,7 +109,7 @@ EventoManager.java ->
 	- boolean editarEvento(Administrador admin, VariavelEvento vEvento)
 	- boolean excluirEvento(Administrador admin)
 
-Interface:
+## Interface:
 
 FALTA:
 Criar relação DAO e SERVICE das palestras
