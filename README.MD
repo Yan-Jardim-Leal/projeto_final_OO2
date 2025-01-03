@@ -25,41 +25,45 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 	);
 
 -- Tabela participantes
-' CREATE TABLE participante (
-    id INT PRIMARY KEY REFERENCES usuario(id),
-    cpf VARCHAR(11) UNIQUE NOT NULL,
-    data_nascimento DATE NOT NULL '
-);
+
+	CREATE TABLE participante (
+    		id INT PRIMARY KEY REFERENCES usuario(id),
+   		cpf VARCHAR(11) UNIQUE NOT NULL,
+    		data_nascimento DATE NOT NULL
+	);
 
 -- Tabela eventos
-' CREATE TABLE evento (
-    id SERIAL PRIMARY KEY,
-    titulo VARCHAR(255) NOT NULL,
-    descricao TEXT,
-    categoria VARCHAR(100),
-    data DATE NOT NULL,
-    hora TIME NOT NULL,
-    duracao INTERVAL,
-    preco DECIMAL(10, 2),
-    capacidade_maxima INT NOT NULL,
-    local VARCHAR(255),
-    is_link BOOLEAN NOT NULL,
-    status VARCHAR(50) -- Status do evento: 'ativo', 'cancelado', depois decide mais '
-);
+
+	CREATE TABLE evento (
+    		id SERIAL PRIMARY KEY,
+    		titulo VARCHAR(255) NOT NULL,
+    		descricao TEXT,
+    		categoria VARCHAR(100),
+    		data DATE NOT NULL,
+    		hora TIME NOT NULL,
+    		duracao INTERVAL,
+    		preco DECIMAL(10, 2),
+    		capacidade_maxima INT NOT NULL,
+    		local VARCHAR(255),
+    		is_link BOOLEAN NOT NULL,
+    		status VARCHAR(50) -- Status do evento: 'ativo', 'cancelado', depois decide mais
+	);
 
 -- Tabela para organizadores (relação entre administrador e evento)
-' CREATE TABLE organizadores (
-    admin_id INT REFERENCES administrador(id),
-    evento_id INT REFERENCES evento(id),
-    PRIMARY KEY (admin_id, evento_id) '
-);
+
+	CREATE TABLE organizadores (
+    		admin_id INT REFERENCES administrador(id),
+    		evento_id INT REFERENCES evento(id),
+    		PRIMARY KEY (admin_id, evento_id)
+	);
 
 -- Tabela para participação de participantes nos eventos
-' CREATE TABLE participante_evento (
-    participante_evento_id SERIAL PRIMARY KEY,
-    participante_id INT REFERENCES participante(id),
-    evento_id INT REFERENCES evento(id) '
-);
+
+	CREATE TABLE participante_evento (
+    		participante_evento_id SERIAL PRIMARY KEY,
+    		participante_id INT REFERENCES participante(id),
+    		evento_id INT REFERENCES evento(id) '
+	);
 
 ## DAO:
 
