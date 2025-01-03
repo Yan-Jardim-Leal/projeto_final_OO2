@@ -7,6 +7,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 ## BD:
 
 -- Tabela de usuários
+
 	CREATE TABLE usuario (
     		id SERIAL PRIMARY KEY,
     		nome_completo VARCHAR(255) NOT NULL,
@@ -16,6 +17,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 	);
 
 -- Tabela administradores
+
 	CREATE TABLE administrador (
     		id INT PRIMARY KEY REFERENCES usuario(id),
     		cargo VARCHAR(100) NOT NULL,
