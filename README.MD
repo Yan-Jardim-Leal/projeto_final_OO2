@@ -67,54 +67,54 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 
 ## DAO:
 
-BancoDados.java ->
-	- conectar()
-	- Connection desconectar()
-	- Connection Properties carregarPropriedades()
-	- void finalizarStatement(Statement statement)
-	- void finalizarResultSet(ResultSet resultSet)
-UserManagerDao.java ->
-	- void conectarBD(Connection conn)
-	- boolean cadastrar(User user)
-	- User getUserPorEmail(String email)
-EventoManagerDao.java ->
+	BancoDados.java ->
+		- conectar()
+		- Connection desconectar()
+		- Connection Properties carregarPropriedades()
+		- void finalizarStatement(Statement statement)
+		- void finalizarResultSet(ResultSet resultSet)
+	UserManagerDao.java ->
+		- void conectarBD(Connection conn)
+		- boolean cadastrar(User user)
+		- User getUserPorEmail(String email)
+	EventoManagerDao.java ->
 
 ## Service:
 
-UserManager.java ->
-	- boolean cadastrarUsuario(User user)
-	- User encontrarUsuario(User user)
-	- User login(String email, String senha)
-User.java ->
-	- Variáveis:
-		protected String nome;
-		protected String senha;
-		protected String email; // DEVE SER DO TIPO UNIQUE NA HORA DE CRIAR O DB
-		protected UsuarioTipo tipo;
-	- User(String nome, String senha, String email) // E após isso usar o setTipo();
-	- boolean verificarSenha(String senha)
-	- getters() nome, email, senha e tipo.
-	- setters() tipo.
-Participante.java extends User ->
-	- Variáveis:
-		private String cpf;
-		private Date dataNascimento;
-	- Participante(String nome, String senha, String email, String cpf, Date dataNascimento)
-	- getters() cpf e dataNascimento.
-Administrador.java extends User ->
-	- Variáveis:
-		private String cargo;
-		private Date dataContratado;
-	- Administrador(String nome, String senha, String email, String cargo, Date dataContratado)
-	- getters() cargo e dataContratado.
-EventoManager.java ->
-	- participarEvento(Participante participante)
-	- confirmarPresenca(Participante participante)
-	- sairEvento(Participante participante)
+	UserManager.java ->
+		- boolean cadastrarUsuario(User user)
+		- User encontrarUsuario(User user)
+		- User login(String email, String senha)
+	User.java ->
+		- Variáveis:
+			protected String nome;
+			protected String senha;
+			protected String email; // DEVE SER DO TIPO UNIQUE NA HORA DE CRIAR O DB
+			protected UsuarioTipo tipo;
+		- User(String nome, String senha, String email) // E após isso usar o setTipo();
+		- boolean verificarSenha(String senha)
+		- getters() nome, email, senha e tipo.
+		- setters() tipo.
+	Participante.java extends User ->
+		- Variáveis:
+			private String cpf;
+			private Date dataNascimento;
+		- Participante(String nome, String senha, String email, String cpf, Date dataNascimento)
+		- getters() cpf e dataNascimento.
+	Administrador.java extends User ->
+		- Variáveis:
+			private String cargo;
+			private Date dataContratado;
+		- Administrador(String nome, String senha, String email, String cargo, Date dataContratado)
+		- getters() cargo e dataContratado.
+	EventoManager.java ->
+		- participarEvento(Participante participante)
+		- confirmarPresenca(Participante participante)
+		- sairEvento(Participante participante)
 	
-	- boolean criarEvento(Administrador admin)
-	- boolean editarEvento(Administrador admin, VariavelEvento vEvento)
-	- boolean excluirEvento(Administrador admin)
+		- boolean criarEvento(Administrador admin)
+		- boolean editarEvento(Administrador admin, VariavelEvento vEvento)
+		- boolean excluirEvento(Administrador admin)
 
 ## Interface:
 
