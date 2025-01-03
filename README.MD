@@ -1,10 +1,10 @@
-==============================================================================
+=
 Parte BD: Yan Jardim Leal
 Parte Dao: Yan Jardim Leal
 Parte Service: Yan Jardim Leal
 Parte Interação com a Interface: Rafael Adonis Menon & Gabriel Capri
 Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri
-==============================================================================
+=
 
 BD:
 ==============================================================================
