@@ -1,13 +1,11 @@
-=
 Parte BD: Yan Jardim Leal
 Parte Dao: Yan Jardim Leal
 Parte Service: Yan Jardim Leal
 Parte Interação com a Interface: Rafael Adonis Menon & Gabriel Capri
 Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri
-=
 
 BD:
-==============================================================================
+
 CREATE TABLE usuario (
     id SERIAL PRIMARY KEY,
     nome_completo VARCHAR(255) NOT NULL,
@@ -59,9 +57,9 @@ CREATE TABLE participante_evento (
     participante_id INT REFERENCES participante(id),
     evento_id INT REFERENCES evento(id)
 );
-==============================================================================
+
 DAO:
-==============================================================================
+
 BancoDados.java ->
 	- conectar()
 	- Connection desconectar()
@@ -73,9 +71,9 @@ UserManagerDao.java ->
 	- boolean cadastrar(User user)
 	- User getUserPorEmail(String email)
 EventoManagerDao.java ->
-==============================================================================
+
 Service:
-==============================================================================
+
 UserManager.java ->
 	- boolean cadastrarUsuario(User user)
 	- User encontrarUsuario(User user)
@@ -110,9 +108,9 @@ EventoManager.java ->
 	- boolean criarEvento(Administrador admin)
 	- boolean editarEvento(Administrador admin, VariavelEvento vEvento)
 	- boolean excluirEvento(Administrador admin)
-==============================================================================
+
 Interface:
-==============================================================================
+
 
 ==============================================================================
 FALTA:
