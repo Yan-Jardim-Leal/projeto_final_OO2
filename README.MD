@@ -124,3 +124,5 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 
 FALTA:
 Criar relação DAO e SERVICE das palestras
+Verificar CPF
+Gerar relatório XLS
