@@ -7,12 +7,10 @@ public final class Administrador extends User {
 	private Date dataContratado;
 	
 	public Administrador(String nome, String senha, String email, String cargo, Date dataContratado) {
-		super(nome, senha, email);
+		super(nome, senha, email, UsuarioTipo.ADMIN);
 		
 		this.cargo = cargo;
 		this.dataContratado = dataContratado;
-		
-		this.setTipo(UsuarioTipo.ADMIN);
 	}
 
 	public String getCargo() {

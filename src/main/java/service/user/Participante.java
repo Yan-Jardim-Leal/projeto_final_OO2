@@ -7,15 +7,13 @@ public final class Participante extends User {
 	private Date dataNascimento;
 	
 	public Participante(String nome, String senha, String email, String cpf, Date dataNascimento) throws Exception {
-		super(nome, senha, email);
+		super(nome, senha, email, UsuarioTipo.DEFAULT);
 		
 		if (validarCPF(cpfNumbers(cpf.toCharArray())) == false)
 			throw new Exception("CPF INVÁLIDO");
 		
 		this.cpf = cpf;
 		this.dataNascimento = dataNascimento;
-		
-		this.setTipo(UsuarioTipo.DEFAULT);
 	}
 	
 	private static char[] cpfNumbers(char[] cpf) {

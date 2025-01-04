@@ -1,6 +1,7 @@
 package service.user;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -14,14 +15,15 @@ public final class UserManager {
 	
 	// Retorna boolean para a GUI saber como reagir em caso de cadastro ou falha
 	public static boolean cadastrarUsuario(User user) {
-		User usuarioExistente = encontrarUsuario(user);
+		User usuarioExistente = getUsuarioByEmail(user.getEmail());
 		
 		if (usuarioExistente != null)
 			return false;
-		
 		try {
+			user.setSenha(encriptarSenha(user.getSenha()));
+			
 			UserManagerDao.cadastrar(user);
-		} catch (SQLException erro) {
+		} catch (Exception erro) {
 			System.out.println("Não foi possível cadastrar o usuário ["+erro+"]");
 			return false;
 		}
@@ -29,13 +31,9 @@ public final class UserManager {
 		return true;
 	}
 	
-	public static User encontrarUsuario(User user) {
-		try {
-			return UserManagerDao.getUserPorEmail(user.getEmail());
-		} catch (SQLException erro) {
-			System.out.println("Não foi possível adquirir o usuário ["+erro+"]");
-			return null;
-		}
+	private static String encriptarSenha(String senha) {
+		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+		return encoder.encode(senha);
 	}
 	
 	public static User login(String email, String senha) {
@@ -52,7 +50,22 @@ public final class UserManager {
 		if (user != null && encoder.matches(senha, user.getSenha()))
 			return user;
 		
-		return null; // Nome ou senha incorretos
+		return null; // Nome de usuário ou senha incorretos.
+	}
+	
+	public static User getUsuarioByEmail(String email) {
+		try {
+			return UserManagerDao.getUserPorEmail(email);
+		} catch (SQLException erro) {
+			System.out.println("Não foi possível adquirir o usuário ["+erro+"]");
+			return null;
+		}
+	}
+	
+	public static ArrayList<User> getUsuarios(UsuarioTipo tipo) {
+		
+		
+		return null;
 	}
 	
 }
