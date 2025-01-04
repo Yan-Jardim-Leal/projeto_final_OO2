@@ -8,6 +8,8 @@ import dao.UserManagerDao;
 
 public final class UserManager {
 	
+	// Criar requisitos mínimos para senha
+	
 	private UserManager() {}
 	
 	// Retorna boolean para a GUI saber como reagir em caso de cadastro ou falha
