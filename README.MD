@@ -112,8 +112,8 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 		- Administrador(String nome, String senha, String email, String cargo, Date dataContratado)
 		- getters() cargo e dataContratado.
 	EventoManager.java ->
-		- bolean participarEvento(Participante participante)
-		- bolean confirmarPresenca(Participante participante)
+		- boolean participarEvento(Participante participante)
+		- boolean confirmarPresenca(Participante participante)
 		- boolean sairEvento(Participante participante)
 	
 		- boolean criarEvento(Administrador admin)
