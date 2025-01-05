@@ -115,11 +115,11 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 		- boolean participarEvento(Participante participante)
 		- boolean confirmarPresenca(Participante participante)
 		- boolean sairEvento(Participante participante)
-	
+			
 		- boolean criarEvento(Administrador admin)
 		- boolean editarEvento(Administrador admin, VariavelEvento vEvento)
 		- boolean excluirEvento(Administrador admin)
-
+		- boolean imprimirEventoXLS(int eventoId)
 ## Interface:
 
 FALTA:

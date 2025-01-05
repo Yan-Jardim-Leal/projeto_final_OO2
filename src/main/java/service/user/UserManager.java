@@ -9,11 +9,12 @@ import dao.UserManagerDao;
 
 public final class UserManager {
 	
-	// Criar requisitos mínimos para senha
+	private User usuarioLogado;
 	
-	private UserManager() {}
+	private UserManager(User usuario) {
+		this.usuarioLogado = usuario;
+	}
 	
-	// Retorna boolean para a GUI saber como reagir em caso de cadastro ou falha
 	public static boolean cadastrarUsuario(User user) {
 		User usuarioExistente = getUsuarioByEmail(user.getEmail());
 		
@@ -31,12 +32,30 @@ public final class UserManager {
 		return true;
 	}
 	
+	private static User getUsuarioByEmail(String email) {
+		try {
+			return UserManagerDao.getUserPorEmail(email);
+		} catch (SQLException erro) {
+			System.out.println("Não foi possível adquirir o usuário ["+erro+"]");
+			return null;
+		}
+	}
+	
+
+	// Criar requisitos mínimos para senha
+	// Retorna boolean para a GUI saber como reagir em caso de cadastro ou falha
+
+	public User getUser() {
+		return usuarioLogado;
+	}
+		
 	private static String encriptarSenha(String senha) {
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		return encoder.encode(senha);
 	}
 	
-	public static User login(String email, String senha) {
+	
+	public static UserManager login(String email, String senha) {
 		User user;
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
@@ -47,26 +66,28 @@ public final class UserManager {
 		}
 		
 		//comparar a senha encriptada com a normal
-		if (user != null && encoder.matches(senha, user.getSenha()))
-			return user;
-		
+		if (user != null && encoder.matches(senha, user.getSenha())) {
+			return new UserManager(user);
+		}
 		return null; // Nome de usuário ou senha incorretos.
 	}
 	
-	public static User getUsuarioByEmail(String email) {
-		try {
-			return UserManagerDao.getUserPorEmail(email);
-		} catch (SQLException erro) {
-			System.out.println("Não foi possível adquirir o usuário ["+erro+"]");
-			return null;
-		}
+	public User getUsuarioLogado() {
+		return this.usuarioLogado;
 	}
 	
-	public static ArrayList<User> getUsuarios(UsuarioTipo tipo) {
-		
-		
-		return null;
-	}
-	
+
 }
+
+// DOCUMENTAÇÃO DA CLASSE:
+/*
+ * 	Essa classe funciona assim:
+ * 	- Ela contém métodos estáticos, que não precisam de nenhum usuário logado para realizar
+ * 	- Ela contém métodos de classe, que precisam de um login para poderem funcionar, um exemplo:
+ * 		um usuário participante só poderia usar funções que dizem respeito aos participantes.
+ * 		um usuário admin só poderia usar funções que dizem respeito aos administradores.
+ * 		uma função geral que funciona idependente de logado ou não.
+ */
+
+
  

@@ -1,39 +1,40 @@
 package service.evento;
 
-import service.user.Administrador;
-import service.user.Participante;
+import service.user.User;
 
-public final class EventoManager {
+public final class EventoManager { //Não ter o public significa que ela só é acessível dentro do Package Service
+	
+	private EventoManager() {}
 	
 	// ==========================||      USUÁRIOS     ||========================== //
-	public boolean participarEvento(Participante participante) {
+	public static boolean participarEvento(User user, Evento evento) {
 		
 		return false;
 	}
 	
-	public boolean confirmarPresenca(Participante participante) {
+	public static boolean confirmarPresenca(User user, Evento evento) {
 		
 		return false;
 	}
 	
-	public boolean sairEvento(Participante participante) {
+	public static boolean sairEvento(User user, Evento evento) {
 		
 		
 		return false;
 	}
 	
 	// ==========================||  ADMINISTRADORES  ||========================== //
-	public boolean criarEvento(Administrador admin) {
+	public static boolean criarEvento(Evento evento) {
 		
 		return false;
 	}
 	
-	public boolean editarEvento(Administrador admin, VariavelEvento vEvento) { // Como e o que eu devo poder editar?
+	public static boolean editarEvento(Evento evento,VariavelEvento vEvento) { // Como e o que eu devo poder editar?
 		
 		return false;
 	}
 	
-	public boolean excluirEvento(Administrador admin) {
+	public static boolean excluirEvento(Evento evento) {
 		
 		return false;
 	}
