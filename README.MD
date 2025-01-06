@@ -138,7 +138,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 ## Interface:
 	
 	LoginWindow.java extends JFrame ->
-	    - private JPanel contentPane;
+	    	- private JPanel contentPane;
 		- private JLabel lblEmail;
 		- private JTextField txtFieldEmail;
 		- private JLabel lblSenha;
