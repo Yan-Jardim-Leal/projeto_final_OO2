@@ -120,8 +120,49 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 		- boolean editarEvento(Administrador admin, VariavelEvento vEvento)
 		- boolean excluirEvento(Administrador admin)
 		- boolean imprimirEventoXLS(int eventoId)
+	ServiceManager.java ->
+		- Variáveis:
+			private User user;
+		- private void verificarAdmin()
+		- private void verificarDefault()
+		- public ArrayList<User> getUsers(UsuarioTipo tipo)
+		- public void gerarRelatorioXLSAdmin()
+		- public void criarEvento(Evento evento)
+		- public void editarEvento(Evento evento, VariavelEvento variavel)
+		- public void excluirEvento()
+		- public void gerarRelatorioXLSParticipante()
+		- public void participarEvento(Evento evento)
+		- public void sairEvento(Evento evento)
+		- public void confimarPresenca(Evento evento)
+		
 ## Interface:
-
+	
+	LoginWindow.java extends JFrame ->
+	    - private JPanel contentPane;
+		- private JLabel lblEmail;s
+		- private JTextField txtFieldEmail;
+		- private JLabel lblSenha;
+		- private JPasswordField passwordFieldSenha;
+		- private JButton btnRegistrar;
+		- private JButton btnLogin;
+		
+	RegisterWindow extends JFrame ->	
+		- private JPanel contentPane;
+		- private JLabel lblNomeCompleto;
+		- private JTextField textFieldNomeCompleto;
+		- private JLabel lblEmail;
+		- private JTextField textFieldEmail;
+		- private JLabel lblSenha;
+		- private JPasswordField passwordField;
+		- private JLabel lblDataNascimento;
+		- private JFormattedTextField formattedTextFieldDataNascimento;
+		- private JLabel lblCpf;
+		- private JFormattedTextField formattedTextFieldCpf;
+		- private JLabel lblTipoUsuario;
+		- private JPasswordField passwordFieldSenhaMestra;
+		- private JLabel lblSenhaMestra;
+		- private JButton btnRegistrar;
+	
 FALTA:
 Criar relação DAO e SERVICE das palestras
 Verificar CPF

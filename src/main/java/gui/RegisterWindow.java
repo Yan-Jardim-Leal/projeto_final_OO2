@@ -30,18 +30,22 @@ public class RegisterWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	private JLabel lblNomeCompleto;
 	private JTextField textFieldNomeCompleto;
+	private JLabel lblEmail;
 	private JTextField textFieldEmail;
+	private JLabel lblSenha;
 	private JPasswordField passwordField;
-	private JLabel lblTipoUsuario;
+	private JLabel lblDataNascimento;
 	private JFormattedTextField formattedTextFieldDataNascimento;
 	private MaskFormatter mascaraData;
-	private JLabel lblDataNascimento;
+	private JLabel lblCpf;
 	private JFormattedTextField formattedTextFieldCpf;
 	private MaskFormatter mascaraCpf;
-	private JLabel lblCpf;
+	private JLabel lblTipoUsuario;
 	private JPasswordField passwordFieldSenhaMestra;
 	private JLabel lblSenhaMestra;
+	private JButton btnRegistrar;
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -83,17 +87,17 @@ public class RegisterWindow extends JFrame {
 		passwordField.setBounds(79, 208, 265, 29);
 		contentPane.add(passwordField);
 		
-		JLabel lblNomeCompleto = new JLabel("Nome Completo");
+		lblNomeCompleto = new JLabel("Nome Completo");
 		lblNomeCompleto.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblNomeCompleto.setBounds(79, 33, 102, 14);
 		contentPane.add(lblNomeCompleto);
 		
-		JLabel lblEmail = new JLabel("E-Mail");
+		lblEmail = new JLabel("E-Mail");
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblEmail.setBounds(78, 108, 46, 14);
 		contentPane.add(lblEmail);
 		
-		JLabel lblSenha = new JLabel("Senha");
+		lblSenha = new JLabel("Senha");
 		lblSenha.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblSenha.setBounds(80, 188, 46, 14);
 		contentPane.add(lblSenha);
@@ -122,14 +126,14 @@ public class RegisterWindow extends JFrame {
 		lblTipoUsuario.setBounds(80, 402, 86, 14);
 		contentPane.add(lblTipoUsuario);
 		
-		JButton buttonRegistrar = new JButton("Registrar");
-		buttonRegistrar.setFont(new Font("Dialog", Font.PLAIN, 12));
-		buttonRegistrar.addActionListener(new ActionListener() {
+		btnRegistrar = new JButton("Registrar");
+		btnRegistrar.setFont(new Font("Dialog", Font.PLAIN, 12));
+		btnRegistrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		buttonRegistrar.setBounds(158, 505, 100, 29);
-		contentPane.add(buttonRegistrar);
+		btnRegistrar.setBounds(158, 505, 100, 29);
+		contentPane.add(btnRegistrar);
 		
 		JComboBox<String> comboBoxTipoUsuario = new JComboBox<String>();
 		comboBoxTipoUsuario.setFont(new Font("Tahoma", Font.PLAIN, 12));
@@ -148,7 +152,7 @@ public class RegisterWindow extends JFrame {
 					contentPane.remove(lblSenhaMestra);
 							
 					setBounds(100, 100, 450, 620);
-					buttonRegistrar.setBounds(158, 505, 100, 29);	
+					btnRegistrar.setBounds(158, 505, 100, 29);	
 					senhaMestraAdicionada = false;
 					contentPane.repaint();
 			} else if(comboBoxTipoUsuario.getSelectedIndex() == 1 && senhaMestraAdicionada == false) {
@@ -162,7 +166,7 @@ public class RegisterWindow extends JFrame {
 					contentPane.add(passwordFieldSenhaMestra);
 							
 					setBounds(100, 100, 450, 700);
-					buttonRegistrar.setBounds(158, 579, 100, 29);
+					btnRegistrar.setBounds(158, 579, 100, 29);
 					senhaMestraAdicionada = true;
 					contentPane.repaint();
 				}

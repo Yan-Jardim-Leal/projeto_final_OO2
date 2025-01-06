@@ -19,9 +19,14 @@ public class LoginWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JButton btnZero;
-	private JTextField txtFieldUsuario;
+	private JLabel lblEmail;
+	private JTextField txtFieldEmail;
+	private JLabel lblSenha;
 	private JPasswordField passwordFieldSenha;
+	private JButton btnRegistrar;
+	private JButton btnLogin;
+
+	
 
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
@@ -49,22 +54,26 @@ public class LoginWindow extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		txtFieldUsuario = new JTextField();
-		txtFieldUsuario.setBounds(81, 61, 265, 29);
-		contentPane.add(txtFieldUsuario);
-		txtFieldUsuario.setColumns(15);
-		
-		JLabel lblSenha = new JLabel("Senha");
-		lblSenha.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblSenha.setBounds(81, 104, 46, 14);
-		contentPane.add(lblSenha);
-		
-		JLabel lblEmail = new JLabel("E-Mail");
+		lblEmail = new JLabel("E-Mail");
 		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		lblEmail.setBounds(81, 36, 46, 14);
 		contentPane.add(lblEmail);
 		
-		JButton btnRegistrar = new JButton("Registrar");
+		txtFieldEmail = new JTextField();
+		txtFieldEmail.setBounds(81, 61, 265, 29);
+		contentPane.add(txtFieldEmail);
+		txtFieldEmail.setColumns(15);
+		
+		lblSenha = new JLabel("Senha");
+		lblSenha.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblSenha.setBounds(81, 104, 46, 14);
+		contentPane.add(lblSenha);
+		
+		passwordFieldSenha = new JPasswordField();
+		passwordFieldSenha.setBounds(81, 133, 265, 29);
+		contentPane.add(passwordFieldSenha);
+		
+		btnRegistrar = new JButton("Registrar");
 		btnRegistrar.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnRegistrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -79,13 +88,10 @@ public class LoginWindow extends JFrame {
 		btnRegistrar.setBounds(81, 198, 89, 25);
 		contentPane.add(btnRegistrar);
 		
-		JButton btnLogin = new JButton("Login");
+		btnLogin = new JButton("Login");
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnLogin.setBounds(257, 198, 89, 25);
 		contentPane.add(btnLogin);
 		
-		passwordFieldSenha = new JPasswordField();
-		passwordFieldSenha.setBounds(81, 133, 265, 29);
-		contentPane.add(passwordFieldSenha);
 	}
 }
