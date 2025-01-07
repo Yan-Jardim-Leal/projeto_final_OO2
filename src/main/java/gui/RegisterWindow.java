@@ -47,21 +47,8 @@ public class RegisterWindow extends JFrame {
 	private JLabel lblSenhaMestra;
 	private JButton btnRegistrar;
 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RegisterWindow frame = new RegisterWindow();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
 	public RegisterWindow() throws ParseException {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		this.setTitle("Sistema de Gerenciamento de Eventos - Registrar");
 		setBounds(100, 100, 450, 620);
 		setResizable(false);
@@ -173,6 +160,6 @@ public class RegisterWindow extends JFrame {
 			}
 			
 		});	
+	
 	}
-
 }

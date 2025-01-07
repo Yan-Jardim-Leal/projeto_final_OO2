@@ -145,6 +145,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 		- private JPasswordField passwordFieldSenha;
 		- private JButton btnRegistrar;
 		- private JButton btnLogin;
+        - private RegisterWindow registerWindow;
 		
 	RegisterWindow extends JFrame ->	
 		- private JPanel contentPane;

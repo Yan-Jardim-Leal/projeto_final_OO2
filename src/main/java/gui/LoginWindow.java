@@ -25,9 +25,8 @@ public class LoginWindow extends JFrame {
 	private JPasswordField passwordFieldSenha;
 	private JButton btnRegistrar;
 	private JButton btnLogin;
-
+	private RegisterWindow registerWindow;
 	
-
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -77,13 +76,7 @@ public class LoginWindow extends JFrame {
 		btnRegistrar.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		btnRegistrar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RegisterWindow registerWindow = null;
-				try {
-					registerWindow = new RegisterWindow();
-				} catch (ParseException e1) {
-					e1.printStackTrace();
-				}
-				registerWindow.setVisible(true);
+				criarRegisterWindow();
 		}});
 		btnRegistrar.setBounds(81, 198, 89, 25);
 		contentPane.add(btnRegistrar);
@@ -93,5 +86,15 @@ public class LoginWindow extends JFrame {
 		btnLogin.setBounds(257, 198, 89, 25);
 		contentPane.add(btnLogin);
 		
+	}
+	
+	private void criarRegisterWindow() {
+		registerWindow = null;
+		try {
+			registerWindow = new RegisterWindow();
+		} catch (ParseException e1) {
+			e1.printStackTrace();
+		}
+		registerWindow.setVisible(true);
 	}
 }
