@@ -54,7 +54,6 @@ public final class UserManager {
 		return encoder.encode(senha);
 	}
 	
-	
 	public static UserManager login(String email, String senha) {
 		User user;
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
