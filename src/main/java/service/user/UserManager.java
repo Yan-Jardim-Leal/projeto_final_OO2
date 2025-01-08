@@ -1,11 +1,11 @@
 package service.user;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import dao.UserManagerDao;
+import service.ServiceManager;
 
 public final class UserManager {
 	
@@ -54,7 +54,7 @@ public final class UserManager {
 		return encoder.encode(senha);
 	}
 	
-	public static UserManager login(String email, String senha) {
+	public static User login(String email, String senha) throws Exception {
 		User user;
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		
@@ -65,10 +65,10 @@ public final class UserManager {
 		}
 		
 		//comparar a senha encriptada com a normal
-		if (user != null && encoder.matches(senha, user.getSenha())) {
-			return new UserManager(user);
-		}
-		return null; // Nome de usuário ou senha incorretos.
+		if (user != null && encoder.matches(senha, user.getSenha()))
+			return user;
+		
+		throw new Exception("Senha ou Email incorretos."); // Nome de usuário ou senha incorretos.
 	}
 	
 	public User getUsuarioLogado() {

@@ -168,3 +168,9 @@ FALTA:
 Criar relação DAO e SERVICE das palestras
 Verificar CPF
 Gerar relatório XLS
+
+CONCEITOS:
+O primeiro usuário a se registrar deverá ser obrigatóriamente um administrador
+administradores podem registrar outros administradores
+usuários normais que se registram devem se registrarem na tela de login
+um administrador pode deletar a conta de um usuário normal
