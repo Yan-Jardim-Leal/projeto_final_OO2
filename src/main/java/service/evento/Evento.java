@@ -9,7 +9,7 @@ import service.user.Administrador;
 public final class Evento {
 	// status (fechado, aberto, encerrado ou cancelado)
 	// categoria (palestra, workshop ou conferência)
-	private int id;
+	private Integer id; //Caso seja null significa que esse evento quer ser adicionado pelo banco de dados
 	
 	private String titulo;
 	private String descricao;
@@ -31,7 +31,7 @@ public final class Evento {
 	private double preco;
 	
 	public Evento(
-			int id,
+			Integer id,
 			String titulo, 
 			String descricao,
 			
@@ -65,6 +65,9 @@ public final class Evento {
 		
 	}
 	
+	public Integer getId() {
+		return this.id;
+	}
 	
 	
 }

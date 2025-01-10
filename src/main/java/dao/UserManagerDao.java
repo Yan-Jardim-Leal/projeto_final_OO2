@@ -20,7 +20,7 @@ public final class UserManagerDao {
 		conexaoBD = conn;
 	}
 	
-	public static int cadastrar(User user) throws SQLException {
+	public static boolean cadastrar(User user) throws SQLException {
 		PreparedStatement statement = null;
 		int userId;
 		
@@ -60,10 +60,10 @@ public final class UserManagerDao {
 			BancoDados.finalizarStatement(statement);
 			
 			conexaoBD.commit(); //Realizar o commit
-			return userId;
+			return true;
 		}catch(SQLException erro) {
 			System.out.println("Erro com o banco de dados ["+erro+"]");
-			return 0;
+			return false;
 		}finally {
 			BancoDados.finalizarStatement(statement);
 		}
@@ -108,7 +108,7 @@ public final class UserManagerDao {
 		return statement;
 	}
 	
-	public static User getUserPorEmail(String email) throws SQLException {
+	public static User getUserPorEmail(String email) throws Exception {
 		PreparedStatement statement = null;
 		ResultSet resultado = null;
 		
