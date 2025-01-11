@@ -53,6 +53,14 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
     		status VARCHAR(50) -- Status do evento: 'ativo', 'cancelado', depois decide mais
 	);
 
+-- Tabela para participação de administradores nos eventos
+
+	CREATE TABLE participante_evento (
+    		administrador_evento_id SERIAL PRIMARY KEY,
+    		administrador_id INT REFERENCES administrador(id),
+    		evento_id INT REFERENCES evento(id) '
+	);
+
 -- Tabela para organizadores (relação entre administrador e evento)
 
 	CREATE TABLE organizadores (
@@ -135,6 +143,8 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 		- public void sairEvento(Evento evento)
 		- public void confimarPresenca(Evento evento)
 		
+		//Importante:
+		- public boolean existemAdministradores()
 ## Interface:
 	
 	LoginWindow.java extends JFrame ->
@@ -174,3 +184,15 @@ O primeiro usuário a se registrar deverá ser obrigatóriamente um administrado
 administradores podem registrar outros administradores
 usuários normais que se registram devem se registrarem na tela de login
 um administrador pode deletar a conta de um usuário normal
+
+FUNCIONAMENTO:
+
+A primeira coisa que o programa faz é tentar se conectar ao banco de dados, caso ele não consiga o programa irá
+apresentar um erro e fechar após 3 tentativas
+
+Caso bem sucedido ele irá abrir a tela de login
+Caso o usuário não tenha uma conta ele poderá se registrar
+
+Dando o login você ganha acesso a respectiva conta que lhe foi dado acesso
+
+

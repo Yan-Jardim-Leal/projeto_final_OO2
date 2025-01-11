@@ -24,7 +24,10 @@ public class BancoDados {
 		
 		conexaoBD = DriverManager.getConnection(url,propriedades);
 		
-		UserManagerDao.conectarBD(conexaoBD); // Ele conecta automaticamente o UserManagerDao ao BD, não tem porque não automatizar isso.
+		// Não tem porque não automatizar isso.
+		UserManagerDao.conectarBD(conexaoBD); 
+		EventoManagerDao.conectarBD(conexaoBD);
+		
 		return conexaoBD;
 	}
 	

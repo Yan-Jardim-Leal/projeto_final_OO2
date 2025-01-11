@@ -41,6 +41,11 @@ public final class ServiceManager {
 			throw new Exception("Usuário já está logado.");
 	}
 	
+	public boolean existemAdministradores() throws Exception {
+		verificarLogin();
+		
+		return false;
+	}
 	// ==========================||   ADMINISTRADOR   ||========================== //
 	public void registrarAdmin(User user) throws Exception {
 		verificarLogin();
@@ -79,6 +84,7 @@ public final class ServiceManager {
 			throw new Exception("Ocorreu um erro ao excluir o evento");
 		
 	}
+	
 	// ==========================||    PARTICIPANTE   ||========================== //
 	public void gerarRelatorioXLSParticipante() throws Exception {
 		verificarDefault();

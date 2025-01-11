@@ -1,6 +1,8 @@
 package service.evento;
 
 import java.sql.Date;
+import java.sql.Time;
+import java.time.Duration;
 import java.util.HashMap;
 
 import service.user.Administrador;
@@ -15,15 +17,13 @@ public final class Evento {
 	private String descricao;
 	
 	private Date dataEvento;
-	private String horaEvento;
-	private String duracaoEvento;
+	private Time horaEvento;
+	private Duration duracaoEvento;
 	
 	private boolean isLink;
 	
 	private String local;
 	private int capacidadeMaxima;
-	
-	private HashMap<Administrador,Boolean> organizadores;
 	
 	private EventoCategoria categoria;
 	private EventoStatus status;
@@ -36,14 +36,13 @@ public final class Evento {
 			String descricao,
 			
 			Date dataEvento, 
-			String horaEvento, 
-			String duracaoEvento,
+			Time horaEvento, 
+			Duration duracaoEvento,
 			
 			String local, // Caso seja link, especificar
 			boolean isLink,
 			
 			int capacidadeMaxima,
-			HashMap<Administrador,Boolean> organizadores,
 			EventoCategoria categoria,
 			EventoStatus status,
 			double preco
@@ -57,7 +56,6 @@ public final class Evento {
 		this.duracaoEvento = duracaoEvento;
 		this.local = local;
 		this.capacidadeMaxima = capacidadeMaxima;
-		this.organizadores = organizadores;
 		this.categoria = categoria;
 		this.status = status;
 		this.preco = preco;
@@ -68,6 +66,49 @@ public final class Evento {
 	public Integer getId() {
 		return this.id;
 	}
-	
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public Date getDataEvento() {
+		return dataEvento;
+	}
+
+	public Time getHoraEvento() {
+		return horaEvento;
+	}
+
+	public Duration getDuracaoEvento() {
+		return duracaoEvento;
+	}
+
+	public boolean isLink() {
+		return isLink;
+	}
+
+	public String getLocal() {
+		return local;
+	}
+
+	public int getCapacidadeMaxima() {
+		return capacidadeMaxima;
+	}
+
+	public EventoCategoria getCategoria() {
+		return categoria;
+	}
+
+	public EventoStatus getStatus() {
+		return status;
+	}
+
+	public double getPreco() {
+		return preco;
+	}
 	
 }

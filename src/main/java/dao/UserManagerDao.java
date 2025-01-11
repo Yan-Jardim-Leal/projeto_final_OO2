@@ -175,4 +175,9 @@ public final class UserManagerDao {
 		return user;
 	}
 	
+	public static boolean existemAdministradores() {
+		return false;
+	}
+	
+	
 }

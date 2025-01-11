@@ -1,8 +1,17 @@
 package service.evento;
 
 public enum EventoCategoria {
-	WORKSHOP,
-	PALESTRA,
-	CONFERENCIA
+	WORKSHOP("workshop"),
+	PALESTRA("palestra"),
+	CONFERENCIA("conferencia");
 	
+	private String sqlName;
+	
+	EventoCategoria(String nome) {
+		this.sqlName = nome;
+	}
+	
+	public String getSQL() {
+		return this.sqlName;
+	}
 }
