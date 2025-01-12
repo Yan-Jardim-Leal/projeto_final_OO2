@@ -8,13 +8,11 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import service.evento.Evento;
 import service.evento.EventoCategoria;
 import service.evento.EventoStatus;
 import service.evento.VariavelEvento;
-import service.user.Administrador;
 import service.user.Participante;
 
 @SuppressWarnings("unused")
@@ -75,8 +73,9 @@ public final class EventoManagerDao {
 	
 	public static Evento getEventoPorId(int id) throws SQLException {
 		PreparedStatement statement = null;
-		Evento evento = null;
 		ResultSet resultado = null;
+		
+		Evento evento = null;
 		
 		String titulo;
 		String descricao;
@@ -95,23 +94,48 @@ public final class EventoManagerDao {
 		
 		double preco;
 		
-		
 		try {
-			conexaoBD.setAutoCommit(false);
-			statement = conexaoBD.prepareStatement("SELECT titulo, descricao, categoria, hora, data, duracao, status, preco, capacidade_maxima, local FROM evento WHERE id = ?");
+			statement = conexaoBD.prepareStatement("SELECT titulo, descricao, categoria, hora, data, duracao, status, preco, capacidade_maxima, is_link, local FROM evento WHERE id = ?");
 			statement.setInt(1, id);
 			
 			resultado = statement.executeQuery();
 			
 			if (resultado.next()) {
 				
-				titulo 	= resultado.getString("nome");
-				senha 	= resultado.getString("senha");
-				tipo 	= resultado.getString("tipo");
+				titulo 				= resultado.getString("titulo");
+				descricao 			= resultado.getString("descricao");
+				local				= resultado.getString("local");
 				
-				BancoDados.finalizarResultSet(resultado);
-				BancoDados.finalizarStatement(statement);
+				horaEvento 			= resultado.getTime("hora");
+				dataEvento 			= resultado.getDate("data");
 				
+				isLink 				= resultado.getBoolean("is_link");
+				
+				preco 				= resultado.getDouble("preco");
+				capacidadeMaxima	= resultado.getInt("capacidade_maxima");
+				
+				duracaoEvento 		= Duration.parse(resultado.getString("duracao"));
+				
+				status 				= EventoStatus.valueOf(resultado.getString("status"));
+				categoria 			= EventoCategoria.valueOf(resultado.getString("categoria"));
+				
+				return new Evento(
+						id,
+						titulo, 
+						descricao,
+						
+						dataEvento, 
+						horaEvento, 
+						duracaoEvento,
+						
+						local, // Caso seja link, especificar
+						isLink,
+						
+						capacidadeMaxima,
+						categoria,
+						status,
+						preco
+					);
 				
 			} else {
 				System.out.println("Não há nenhum evento cadastrado com esse id.");
@@ -120,10 +144,10 @@ public final class EventoManagerDao {
 			
 		} finally {
 			
+			BancoDados.finalizarResultSet(resultado);
+			BancoDados.finalizarStatement(statement);
 			
 		}
-		
-		return evento;
 	}
 	
 	public static ArrayList<Participante> getParticipantesEvento(int id) {

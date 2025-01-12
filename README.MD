@@ -45,7 +45,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
     		categoria VARCHAR(100),
     		data DATE NOT NULL,
     		hora TIME NOT NULL,
-    		duracao INTERVAL,
+    		duracao VARCHAR(255) NOT NULL,
     		preco DECIMAL(10, 2),
     		capacidade_maxima INT NOT NULL,
     		local VARCHAR(255),
