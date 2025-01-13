@@ -55,7 +55,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 
 -- Tabela para participação de administradores nos eventos
 
-	CREATE TABLE participante_evento (
+	CREATE TABLE administrador_evento (
     		administrador_evento_id SERIAL PRIMARY KEY,
     		administrador_id INT REFERENCES administrador(id),
     		evento_id INT REFERENCES evento(id) '

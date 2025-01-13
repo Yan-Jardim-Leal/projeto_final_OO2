@@ -174,6 +174,73 @@ public final class UserManagerDao {
 		
 		return user;
 	}
+
+	public static User getUserPorId(int id) throws Exception {
+		PreparedStatement statement = null;
+		ResultSet resultado = null;
+		
+		String email;
+		String nome;
+		String senha;
+		String tipo;
+		
+		User user = null;
+		
+		try {
+			statement = conexaoBD.prepareStatement("SELECT email,nome,senha FROM usuario WHERE email LIKE ?");
+			statement.setInt(1, id);
+			resultado = statement.executeQuery();
+			
+			if (resultado.next()) {
+				
+				email 	= resultado.getString("email");
+				nome 	= resultado.getString("nome");
+				senha 	= resultado.getString("senha");
+				tipo 	= resultado.getString("tipo");
+				
+				BancoDados.finalizarResultSet(resultado);
+				BancoDados.finalizarStatement(statement);
+				
+				if (UsuarioTipo.getFromString(tipo) == UsuarioTipo.ADMIN) {
+					statement = conexaoBD.prepareStatement("SELECT data_contratado,cargo FROM admin WHERE admin.id = ?");
+					statement.setInt(1, id);
+					resultado = statement.executeQuery();
+					
+					Date dataContratado;
+					String cargo;
+					
+					dataContratado  = resultado.getDate("data_contratado");
+					cargo = resultado.getString("cargo");
+					
+					user = (Administrador) new Administrador(nome, senha, email, cargo, dataContratado);
+					
+				} else {
+					statement = conexaoBD.prepareStatement("SELECT data_nascimento,cpf FROM participante WHERE participante.id = ?");
+					statement.setInt(1, id);
+					resultado = statement.executeQuery();
+					
+					Date dataNascimento;
+					String cpf;
+					
+					dataNascimento = resultado.getDate("data_nascimento");
+					cpf = resultado.getString("cpf");
+					
+					user = (Participante) new Participante(nome, senha, email, cpf, dataNascimento);
+				}
+				
+				BancoDados.finalizarResultSet(resultado);
+				BancoDados.finalizarStatement(statement);
+				
+			}else {
+				System.out.println("Usuário com esse Email não encontrado!");
+			}
+		}finally {
+			BancoDados.finalizarResultSet(resultado);
+			BancoDados.finalizarStatement(statement);
+		}
+		
+		return user;
+	}
 	
 	public static boolean existemAdministradores() {
 		return false;

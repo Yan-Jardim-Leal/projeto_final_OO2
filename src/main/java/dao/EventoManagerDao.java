@@ -150,9 +150,35 @@ public final class EventoManagerDao {
 		}
 	}
 	
-	public static ArrayList<Participante> getParticipantesEvento(int id) {
-		ArrayList<Participante> participantes = null;
+	public static ArrayList<Participante> getParticipantesEvento(int id) throws SQLException {
+		ArrayList<Participante> participantes = new ArrayList<Participante>();
 		
+		PreparedStatement statement = null;
+		ResultSet resultado = null;
+		
+		try {
+			statement = conexaoBD.prepareStatement("SELECT participante_evento_id FROM participante_evento WHERE id = ?");
+			resultado = statement.executeQuery();
+			
+			while (resultado.next()) {
+				
+				int idParticipante = resultado.getInt("participante_evento_id");
+				
+				participantes.add((Participante) UserManagerDao.getUserPorId(idParticipante));
+				
+			}
+			
+		} catch (SQLException erro) {
+			
+			erro.printStackTrace();
+		} catch (Exception erro) {
+			
+			erro.printStackTrace();
+		} finally {
+			
+			BancoDados.finalizarResultSet(resultado);
+			BancoDados.finalizarStatement(statement);
+		}
 		
 		return participantes;
 	}

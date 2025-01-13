@@ -59,6 +59,12 @@ public final class ServiceManager {
 		return null;
 	}
 	
+	public ArrayList<User> getUsersPorNome(String nome) throws Exception {
+		verificarAdmin();
+		
+		return null;
+	}
+	
 	public void gerarRelatorioXLSAdmin() throws Exception {
 		verificarAdmin();
 		
@@ -119,5 +125,10 @@ public final class ServiceManager {
 	}
 	
 	// ==========================|| ================= ||========================== //
+	
+	public ArrayList<Evento> getEventoPorNome(String nome) throws Exception {
+		
+		return null;
+	}
 	
 }
