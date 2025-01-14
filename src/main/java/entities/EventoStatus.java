@@ -1,4 +1,4 @@
-package service.evento;
+package entities;
 
 public enum EventoStatus {
 	ABERTO("aberto"),

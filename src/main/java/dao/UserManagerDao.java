@@ -6,10 +6,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import service.user.Administrador;
-import service.user.Participante;
-import service.user.User;
-import service.user.UsuarioTipo;
+import entities.Administrador;
+import entities.Participante;
+import entities.User;
+import entities.UsuarioTipo;
 
 public final class UserManagerDao {
 	private static Connection conexaoBD;
@@ -67,6 +67,47 @@ public final class UserManagerDao {
 		}finally {
 			BancoDados.finalizarStatement(statement);
 		}
+	}
+	
+	public static boolean apagarUsuarioPorEmail(String email) throws SQLException {
+	    PreparedStatement statement = null;
+
+	    try {
+	        
+	        statement = conexaoBD.prepareStatement("SELECT id FROM usuario WHERE email = ?");
+	        statement.setString(1, email);
+	        ResultSet resultado = statement.executeQuery();
+
+	        if (!resultado.next()) {
+	            System.out.println("Usuário com esse email não encontrado.");
+	            return false;
+	        }
+
+	        int userId = resultado.getInt("id");
+
+	        
+	        BancoDados.finalizarResultSet(resultado);
+	        BancoDados.finalizarStatement(statement);
+	        
+	        statement = conexaoBD.prepareStatement("DELETE FROM administrador WHERE id = ?");
+	        statement.setInt(1, userId);
+	        statement.executeUpdate();
+
+	        statement = conexaoBD.prepareStatement("DELETE FROM participante WHERE id = ?");
+	        statement.setInt(1, userId);
+	        statement.executeUpdate();
+
+	        statement = conexaoBD.prepareStatement("DELETE FROM usuario WHERE id = ?");
+	        statement.setInt(1, userId);
+	        int rowsAffected = statement.executeUpdate();
+
+	        return rowsAffected > 0;
+	    } catch (SQLException erro) {
+	        System.err.println("Erro ao apagar o usuário [ " + erro + " ]");
+	        return false;
+	    } finally {
+	        BancoDados.finalizarStatement(statement);
+	    }
 	}
 	
 	private static PreparedStatement cadastroAdmin(Administrador admin, int id) { 
@@ -240,6 +281,33 @@ public final class UserManagerDao {
 		}
 		
 		return user;
+	}
+	
+	public static boolean maiorQue(int quantidade) throws SQLException {
+		PreparedStatement statement = null;
+		ResultSet resultado = null;
+		
+		int comparado = 0;
+		
+		try {
+			statement = conexaoBD.prepareStatement("SELECT COUNT() AS total FROM usuario");
+			resultado = statement.executeQuery();
+			
+			if (resultado.next()) {
+				comparado = resultado.getInt("total");
+			}
+			
+		} catch (SQLException erro){
+			System.err.println("ERRO ao verificar a quantidade de usuários [ "+erro+" ]");
+		} finally {
+			BancoDados.finalizarResultSet(resultado);
+			BancoDados.finalizarStatement(statement);
+		}
+		
+		if (quantidade > comparado)
+			return true;
+		
+		return false;
 	}
 	
 	public static boolean existemAdministradores() {

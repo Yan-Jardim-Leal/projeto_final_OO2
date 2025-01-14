@@ -97,4 +97,5 @@ public class LoginWindow extends JFrame {
 		}
 		registerWindow.setVisible(true);
 	}
+	
 }

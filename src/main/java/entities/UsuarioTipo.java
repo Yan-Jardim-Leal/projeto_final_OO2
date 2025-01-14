@@ -1,4 +1,4 @@
-package service.user;
+package entities;
 
 public enum UsuarioTipo {
 	ADMIN("admin"),

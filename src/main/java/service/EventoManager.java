@@ -1,6 +1,11 @@
-package service.evento;
+package service;
 
-import service.user.User;
+import java.sql.SQLException;
+
+import dao.EventoManagerDao;
+import entities.Evento;
+import entities.User;
+import entities.VariavelEvento;
 
 public final class EventoManager { //Não ter o public significa que ela só é acessível dentro do Package Service
 	
@@ -25,8 +30,13 @@ public final class EventoManager { //Não ter o public significa que ela só é 
 	
 	// ==========================||  ADMINISTRADORES  ||========================== //
 	public static boolean criarEvento(Evento evento) {
+		try {
+			return EventoManagerDao.adicionar(evento);
+		} catch (SQLException erro) {
+			System.out.println("Não foi possível finalizar a criação do evento");
+			return false;
+		}
 		
-		return false;
 	}
 	
 	public static boolean editarEvento(Evento evento,VariavelEvento vEvento) { // Como e o que eu devo poder editar?

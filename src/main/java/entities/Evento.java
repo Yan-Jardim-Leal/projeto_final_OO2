@@ -1,11 +1,9 @@
-package service.evento;
+package entities;
 
 import java.sql.Date;
 import java.sql.Time;
 import java.time.Duration;
 import java.util.HashMap;
-
-import service.user.Administrador;
 
 @SuppressWarnings("unused")
 public final class Evento {

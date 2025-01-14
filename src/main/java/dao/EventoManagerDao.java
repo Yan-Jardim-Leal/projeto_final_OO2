@@ -9,11 +9,11 @@ import java.sql.Time;
 import java.time.Duration;
 import java.util.ArrayList;
 
-import service.evento.Evento;
-import service.evento.EventoCategoria;
-import service.evento.EventoStatus;
-import service.evento.VariavelEvento;
-import service.user.Participante;
+import entities.Evento;
+import entities.EventoCategoria;
+import entities.EventoStatus;
+import entities.Participante;
+import entities.VariavelEvento;
 
 @SuppressWarnings("unused")
 public final class EventoManagerDao {	
@@ -65,11 +65,11 @@ public final class EventoManagerDao {
 		}
 	}
 	
+	/*
 	public static boolean editar(int id, VariavelEvento variavel, Undefined valor) throws SQLException {
 		Evento evento = getEventoPorId(id);
-		
-		
 	}
+	*/
 	
 	public static Evento getEventoPorId(int id) throws SQLException {
 		PreparedStatement statement = null;
@@ -181,6 +181,52 @@ public final class EventoManagerDao {
 		}
 		
 		return participantes;
+	}
+	
+	public static boolean excluir(int id) throws SQLException {
+	    PreparedStatement statementOrganizadores = null;
+	    PreparedStatement statementParticipanteEvento = null;
+	    PreparedStatement statementEvento = null;
+
+	    try {
+	        conexaoBD.setAutoCommit(false);
+
+	        Evento evento = getEventoPorId(id);
+	        if (evento == null) {
+	            System.out.println("Evento não encontrado com o ID: " + id);
+	            return false;
+	        }
+
+	        statementOrganizadores = conexaoBD.prepareStatement("DELETE FROM organizadores WHERE evento_id = ?");
+	        statementOrganizadores.setInt(1, id);
+	        statementOrganizadores.executeUpdate();
+
+	        statementParticipanteEvento = conexaoBD.prepareStatement("DELETE FROM participante_evento WHERE evento_id = ?");
+	        statementParticipanteEvento.setInt(1, id);
+	        statementParticipanteEvento.executeUpdate();
+
+	        statementEvento = conexaoBD.prepareStatement("DELETE FROM evento WHERE id = ?");
+	        statementEvento.setInt(1, id);
+	        int linhasAfetadas = statementEvento.executeUpdate();
+
+	        if (linhasAfetadas > 0) {
+	            conexaoBD.commit();
+	            System.out.println("Evento com ID " + id + " e seus relacionamentos foram excluídos com sucesso.");
+	            return true;
+	        } else {
+	            System.out.println("Nenhum evento foi excluído. ID inexistente.");
+	            return false;
+	        }
+	    } catch (SQLException erro) {
+	        conexaoBD.rollback();
+	        System.err.println("Erro ao excluir evento: " + erro.getMessage());
+	        throw erro;
+	    } finally {
+	        conexaoBD.setAutoCommit(true);
+	        BancoDados.finalizarStatement(statementOrganizadores);
+	        BancoDados.finalizarStatement(statementParticipanteEvento);
+	        BancoDados.finalizarStatement(statementEvento);
+	    }
 	}
 	
 }
