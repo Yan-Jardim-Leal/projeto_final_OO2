@@ -73,6 +73,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 
 	CREATE TABLE participante_evento (
     		participante_evento_id SERIAL PRIMARY KEY,
+    		confirmou_presenca BOOLEAN NOT NULL,
     		participante_id INT REFERENCES participante(id),
     		evento_id INT REFERENCES evento(id) '
 	);
@@ -91,12 +92,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 		- User getUserPorEmail(String email)
 	EventoManagerDao.java ->
 
-## Service:
-
-	UserManager.java ->
-		- boolean cadastrarUsuario(User user)
-		- User encontrarUsuario(User user)
-		- User login(String email, String senha)
+## Entidades:
 	User.java ->
 		- Variáveis:
 			protected String nome;
@@ -119,6 +115,27 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 			private Date dataContratado;
 		- Administrador(String nome, String senha, String email, String cargo, Date dataContratado)
 		- getters() cargo e dataContratado.
+	Evento.java ->
+		- Variáveis:
+				private Integer id;
+				private String titulo;
+				private String descricao;
+				private Date dataEvento;
+				private Time horaEvento;
+				private Duration duracaoEvento;
+				private boolean isLink;
+				private String local;
+				private int capacidadeMaxima;
+				private EventoCategoria categoria;
+				private EventoStatus status;
+				private double preco;
+		- public Evento(variáveis).
+		- Todos os getters.
+## Service:
+	UserManager.java ->
+		- public static void cadastrarUsuario(User user) throws Exception
+		- public static void apagarUsuario() throws SQLException, UsuarioNaoLogadoException
+		- public static boolean usuariosMaiorQue(int quantidade) throws SQLException
 	EventoManager.java ->
 		- boolean participarEvento(Participante participante)
 		- boolean confirmarPresenca(Participante participante)
@@ -128,23 +145,22 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 		- boolean editarEvento(Administrador admin, VariavelEvento vEvento)
 		- boolean excluirEvento(Administrador admin)
 		- boolean imprimirEventoXLS(int eventoId)
-	ServiceManager.java ->
+	LoginManager.java ->
 		- Variáveis:
-			private User user;
-		- private void verificarAdmin()
-		- private void verificarDefault()
-		- public ArrayList<User> getUsers(UsuarioTipo tipo)
-		- public void gerarRelatorioXLSAdmin()
-		- public void criarEvento(Evento evento)
-		- public void editarEvento(Evento evento, VariavelEvento variavel)
-		- public void excluirEvento()
-		- public void gerarRelatorioXLSParticipante()
-		- public void participarEvento(Evento evento)
-		- public void sairEvento(Evento evento)
-		- public void confimarPresenca(Evento evento)
+			private User usuarioLogado;
+		
+		- private LoginManager()
+		- public static void login(String email, String senha) throws LoginException 
+		- public static void logOff()
+		- public static boolean isLogado()
+		- public static User getUsuario()
 		
 		//Importante:
-		- public boolean existemAdministradores()
+		P: 	Como o service funcionará?
+		R: 	Por meio do Login Manager, User Manager e Evento Manager,
+			primeiro utilizamos o Login Manager para realizar um login ou um User Manager
+			para criar uma conta de usuário. após isso o usuário estará liberado a suas
+			respectivas funções de classe.
 ## Interface:
 	
 	LoginWindow.java extends JFrame ->

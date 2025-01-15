@@ -1,14 +1,17 @@
 package entities;
 
 public abstract class User {
-	// ==========================||     VARIÁVEIS     ||========================== //
+	// ==========================||     VARIÁVEIS     ||========================== //]
+	protected int id;
+	
 	protected String nome;
 	protected String senha;
 	
 	protected String email; // DEVE SER DO TIPO UNIQUE NA HORA DE CRIAR O DB
 	protected UsuarioTipo tipo;
 	// ==========================||      FUNÇÕES      ||========================== //
-	public User(String nome, String senha, String email, UsuarioTipo tipo) {
+	public User(int id, String nome, String senha, String email, UsuarioTipo tipo) {
+		this.id = id;
 		this.nome = nome;
 		this.senha = senha; // ENCRIPTAR A SENHA
 		this.email = email;
@@ -32,9 +35,13 @@ public abstract class User {
 		return tipo;
 	}
 	
+	public int getId() {
+		return this.id;
+	}
+	
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
+		
 	// ==========================|| ================= ||========================== //
 }

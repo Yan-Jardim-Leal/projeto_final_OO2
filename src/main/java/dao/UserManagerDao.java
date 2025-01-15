@@ -186,7 +186,7 @@ public final class UserManagerDao {
 					dataContratado  = resultado.getDate("data_contratado");
 					cargo = resultado.getString("cargo");
 					
-					user = (Administrador) new Administrador(nome, senha, email, cargo, dataContratado);
+					user = (Administrador) new Administrador(id, nome, senha, email, cargo, dataContratado);
 					
 				} else {
 					statement = conexaoBD.prepareStatement("SELECT data_nascimento,cpf FROM participante WHERE participante.id = ?");
@@ -199,7 +199,7 @@ public final class UserManagerDao {
 					dataNascimento = resultado.getDate("data_nascimento");
 					cpf = resultado.getString("cpf");
 					
-					user = (Participante) new Participante(nome, senha, email, cpf, dataNascimento);
+					user = (Participante) new Participante(id, nome, senha, email, cpf, dataNascimento);
 				}
 				
 				BancoDados.finalizarResultSet(resultado);
@@ -253,7 +253,7 @@ public final class UserManagerDao {
 					dataContratado  = resultado.getDate("data_contratado");
 					cargo = resultado.getString("cargo");
 					
-					user = (Administrador) new Administrador(nome, senha, email, cargo, dataContratado);
+					user = (Administrador) new Administrador(id, nome, senha, email, cargo, dataContratado);
 					
 				} else {
 					statement = conexaoBD.prepareStatement("SELECT data_nascimento,cpf FROM participante WHERE participante.id = ?");
@@ -266,7 +266,7 @@ public final class UserManagerDao {
 					dataNascimento = resultado.getDate("data_nascimento");
 					cpf = resultado.getString("cpf");
 					
-					user = (Participante) new Participante(nome, senha, email, cpf, dataNascimento);
+					user = (Participante) new Participante(id, nome, senha, email, cpf, dataNascimento);
 				}
 				
 				BancoDados.finalizarResultSet(resultado);
@@ -283,7 +283,7 @@ public final class UserManagerDao {
 		return user;
 	}
 	
-	public static boolean maiorQue(int quantidade) throws SQLException {
+	public static boolean UsuariosMaiorQue(int quantidade) throws SQLException {
 		PreparedStatement statement = null;
 		ResultSet resultado = null;
 		
@@ -309,10 +309,5 @@ public final class UserManagerDao {
 		
 		return false;
 	}
-	
-	public static boolean existemAdministradores() {
-		return false;
-	}
-	
-	
+		
 }

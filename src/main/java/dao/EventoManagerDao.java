@@ -13,6 +13,7 @@ import entities.Evento;
 import entities.EventoCategoria;
 import entities.EventoStatus;
 import entities.Participante;
+import entities.User;
 import entities.VariavelEvento;
 
 @SuppressWarnings("unused")
@@ -229,4 +230,100 @@ public final class EventoManagerDao {
 	    }
 	}
 	
+	public static boolean usuarioEstaNoEvento(User user, int eventoId) throws SQLException {
+	    PreparedStatement statement = null;
+	    ResultSet resultado = null;
+
+	    try {
+	        statement = conexaoBD.prepareStatement("SELECT 1 FROM participante_evento WHERE participante_id = ? AND evento_id = ?");
+	        statement.setInt(1, user.getId());
+	        statement.setInt(2, eventoId);
+
+	        resultado = statement.executeQuery();
+
+	        return resultado.next(); // Retorna true se encontrar um registro
+	    } finally {
+	        BancoDados.finalizarResultSet(resultado);
+	        BancoDados.finalizarStatement(statement);
+	    }
+	}
+	
+	public static boolean adicionarParticipanteEvento(User user, int eventoId) throws SQLException {
+	    PreparedStatement statement = null;
+
+	    try {
+	        if (usuarioEstaNoEvento(user, eventoId)) {
+	            System.out.println("Usuário já está no evento.");
+	            return false;
+	        }
+
+	        statement = conexaoBD.prepareStatement(
+	            "INSERT INTO participante_evento (confirmou_presenca, participante_id, evento_id) VALUES (?, ?, ?)"
+	        );
+	        statement.setBoolean(1, false); // Presença não confirmada inicialmente
+	        statement.setInt(2, user.getId());
+	        statement.setInt(3, eventoId);
+
+	        statement.executeUpdate();
+	        System.out.println("Usuário adicionado ao evento com sucesso.");
+	        return true;
+	    } finally {
+	        BancoDados.finalizarStatement(statement);
+	    }
+	}
+	
+	public static boolean confirmarPresencaEvento(User user, int eventoId) throws SQLException {
+	    PreparedStatement statement = null;
+
+	    try {
+	        if (!usuarioEstaNoEvento(user, eventoId)) {
+	            System.out.println("Usuário não está registrado no evento.");
+	            return false;
+	        }
+
+	        statement = conexaoBD.prepareStatement(
+	            "UPDATE participante_evento SET confirmou_presenca = ? WHERE participante_id = ? AND evento_id = ?"
+	        );
+	        statement.setBoolean(1, true);
+	        statement.setInt(2, user.getId());
+	        statement.setInt(3, eventoId);
+
+	        int rowsUpdated = statement.executeUpdate();
+	        if (rowsUpdated > 0) {
+	            return true;
+	        } else {
+	            return false;
+	        }
+	    } finally {
+	        BancoDados.finalizarStatement(statement);
+	    }
+	}
+	
+	public static boolean sairParticipanteEvento(User user, int eventoId) throws SQLException {
+	    PreparedStatement statement = null;
+
+	    try {
+	        if (!usuarioEstaNoEvento(user, eventoId)) {
+	            System.out.println("Usuário não está registrado no evento.");
+	            return false;
+	        }
+
+	        statement = conexaoBD.prepareStatement(
+	            "DELETE FROM participante_evento WHERE participante_id = ? AND evento_id = ?"
+	        );
+	        statement.setInt(1, user.getId());
+	        statement.setInt(2, eventoId);
+
+	        int rowsDeleted = statement.executeUpdate();
+	        if (rowsDeleted > 0) {
+	            System.out.println("Usuário removido do evento com sucesso.");
+	            return true;
+	        } else {
+	            System.out.println("Erro ao remover usuário do evento. Nenhuma linha foi excluída.");
+	            return false;
+	        }
+	    } finally {
+	        BancoDados.finalizarStatement(statement);
+	    }
+	}
 }
