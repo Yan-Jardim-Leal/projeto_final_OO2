@@ -2,7 +2,7 @@ package entities;
 
 public abstract class User {
 	// ==========================||     VARIÁVEIS     ||========================== //]
-	protected int id;
+	protected Integer id;
 	
 	protected String nome;
 	protected String senha;
@@ -10,7 +10,7 @@ public abstract class User {
 	protected String email; // DEVE SER DO TIPO UNIQUE NA HORA DE CRIAR O DB
 	protected UsuarioTipo tipo;
 	// ==========================||      FUNÇÕES      ||========================== //
-	public User(int id, String nome, String senha, String email, UsuarioTipo tipo) {
+	public User(Integer id, String nome, String senha, String email, UsuarioTipo tipo) {
 		this.id = id;
 		this.nome = nome;
 		this.senha = senha; // ENCRIPTAR A SENHA
@@ -35,7 +35,7 @@ public abstract class User {
 		return tipo;
 	}
 	
-	public int getId() {
+	public Integer getId() {
 		return this.id;
 	}
 	

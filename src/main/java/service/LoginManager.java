@@ -32,9 +32,12 @@ public final class LoginManager {
 		}
 		
 		//comparar a senha encriptada com a normal
-		if (user != null && encoder.matches(senha, user.getSenha()))
+		if (user != null && encoder.matches(senha, user.getSenha())) {
 			usuarioLogado = user;
-		
+			System.out.println("Usuário logado com sucesso!");
+			return;
+		}
+			
 		throw new CredenciaisInvalidasException(); // Nome de usuário ou senha incorretos.
 	}
 	

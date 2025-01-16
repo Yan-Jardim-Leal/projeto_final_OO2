@@ -6,7 +6,7 @@ public final class Participante extends User {
 	private String cpf;
 	private Date dataNascimento;
 	
-	public Participante(int id, String nome, String senha, String email, String cpf, Date dataNascimento) throws Exception {
+	public Participante(Integer id, String nome, String senha, String email, String cpf, Date dataNascimento) throws Exception {
 		super(id, nome, senha, email, UsuarioTipo.DEFAULT);
 		
 		if (validarCPF(cpfNumbers(cpf.toCharArray())) == false)

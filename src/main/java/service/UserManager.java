@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import dao.UserManagerDao;
 import entities.Administrador;
+import entities.Participante;
 import entities.User;
 import entities.UsuarioTipo;
 import exceptions.UsuarioNaoLogadoException;
@@ -22,8 +23,10 @@ public final class UserManager {
 		if (usuarioExistente != null)
 			throw new Exception("Este Email já está sendo ultilizado.");
 		
-		if (!usuariosMaiorQue(0)) // Define o primeiro usuário como administrador obrigatóriamente
+		if (usuariosMaiorQue(0) == true) // Define o primeiro usuário como administrador obrigatóriamente
 			user = (Administrador) user;
+		else
+			user = (Participante) user;
 		
 		try {
 			// Criar requisitos mínimos para senha depois
@@ -43,7 +46,7 @@ public final class UserManager {
 		LoginManager.logOff();
 	}
 	
-	public static boolean usuariosMaiorQue(int quantidade) throws SQLException {
+	public static boolean usuariosMaiorQue(int quantidade) throws Exception {
 		return UserManagerDao.UsuariosMaiorQue(quantidade); 
 	}
 	

@@ -11,72 +11,62 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 ## BD:
 
 -- Tabela de usuários
-
 	CREATE TABLE usuario (
-    		id SERIAL PRIMARY KEY,
-    		nome_completo VARCHAR(255) NOT NULL,
-    		email VARCHAR(255) UNIQUE NOT NULL,
-    		senha VARCHAR(255) NOT NULL,
-    		tipo VARCHAR(50) NOT NULL -- Tipo do usuário: 'participante' ou 'administrador'
+ 	   id INT PRIMARY KEY AUTO_INCREMENT,
+ 	   nome_completo VARCHAR(255) NOT NULL,
+ 	   email VARCHAR(255) UNIQUE NOT NULL,
+ 	   senha VARCHAR(255) NOT NULL,
+ 	   tipo VARCHAR(50) NOT NULL -- Tipo do usuário: 'participante' ou 	'administrador'
 	);
 
 -- Tabela administradores
-
 	CREATE TABLE administrador (
-    		id INT PRIMARY KEY REFERENCES usuario(id),
-    		cargo VARCHAR(100) NOT NULL,
-    		data_contratado DATE NOT NULL
+	    id INT PRIMARY KEY REFERENCES usuario(id),
+	    cargo VARCHAR(100) NOT NULL,
+	    data_contratado DATE NOT NULL
 	);
 
 -- Tabela participantes
-
 	CREATE TABLE participante (
-    		id INT PRIMARY KEY REFERENCES usuario(id),
-   		cpf VARCHAR(11) UNIQUE NOT NULL,
-    		data_nascimento DATE NOT NULL
+	    id INT PRIMARY KEY REFERENCES usuario(id),
+	    cpf VARCHAR(11) UNIQUE NOT NULL,
+    	data_nascimento DATE NOT NULL
 	);
 
 -- Tabela eventos
-
 	CREATE TABLE evento (
-    		id SERIAL PRIMARY KEY,
-    		titulo VARCHAR(255) NOT NULL,
-    		descricao TEXT,
-    		categoria VARCHAR(100),
-    		data DATE NOT NULL,
-    		hora TIME NOT NULL,
-    		duracao VARCHAR(255) NOT NULL,
-    		preco DECIMAL(10, 2),
-    		capacidade_maxima INT NOT NULL,
-    		local VARCHAR(255),
-    		is_link BOOLEAN NOT NULL,
-    		status VARCHAR(50) -- Status do evento: 'ativo', 'cancelado', depois decide mais
-	);
-
--- Tabela para participação de administradores nos eventos
-
-	CREATE TABLE administrador_evento (
-    		administrador_evento_id SERIAL PRIMARY KEY,
-    		administrador_id INT REFERENCES administrador(id),
-    		evento_id INT REFERENCES evento(id) '
-	);
+    	id INT PRIMARY KEY AUTO_INCREMENT,
+    	titulo VARCHAR(255) NOT NULL,
+    	descricao TEXT,
+    	categoria VARCHAR(100),
+    	data DATE NOT NULL,
+    	hora TIME NOT NULL,
+    	duracao VARCHAR(255) NOT NULL,
+    	preco DECIMAL(10, 2),
+    	capacidade_maxima INT NOT NULL,
+    	local VARCHAR(255),
+    	is_link BOOLEAN NOT NULL,
+    	status VARCHAR(50) -- Status do evento: 'ativo', 'cancelado', etc.
+);
 
 -- Tabela para organizadores (relação entre administrador e evento)
-
-	CREATE TABLE organizadores (
-    		admin_id INT REFERENCES administrador(id),
-    		evento_id INT REFERENCES evento(id),
-    		PRIMARY KEY (admin_id, evento_id)
+	CREATE TABLE administrador_evento (
+    	admin_id INT NOT NULL,
+    	evento_id INT NOT NULL,
+    	PRIMARY KEY (admin_id, evento_id),
+    	CONSTRAINT fk_admin FOREIGN KEY (admin_id) REFERENCES administrador(id),
+    	CONSTRAINT fk_evento FOREIGN KEY (evento_id) REFERENCES evento(id)
 	);
 
 -- Tabela para participação de participantes nos eventos
-
 	CREATE TABLE participante_evento (
-    		participante_evento_id SERIAL PRIMARY KEY,
-    		confirmou_presenca BOOLEAN NOT NULL,
-    		participante_id INT REFERENCES participante(id),
-    		evento_id INT REFERENCES evento(id) '
-	);
+    	participante_id INT NOT NULL,
+    	evento_id INT NOT NULL,
+    	confirmou_presenca BOOLEAN NOT NULL,
+    	PRIMARY KEY (participante_id, evento_id),
+    	CONSTRAINT fk_participante FOREIGN KEY (participante_id) 		REFERENCES participante(id),
+    	CONSTRAINT fk_evento_participante FOREIGN KEY (evento_id) 		REFERENCES evento(id)
+);
 
 ## DAO:
 

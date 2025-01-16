@@ -6,7 +6,7 @@ public final class Administrador extends User {
 	private String cargo;
 	private Date dataContratado;
 	
-	public Administrador(int id, String nome, String senha, String email, String cargo, Date dataContratado) {
+	public Administrador(Integer id, String nome, String senha, String email, String cargo, Date dataContratado) {
 		super(id, nome, senha, email, UsuarioTipo.ADMIN);
 		
 		this.cargo = cargo;
