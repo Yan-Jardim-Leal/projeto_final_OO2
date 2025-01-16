@@ -39,10 +39,10 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 -- Tabela eventos
 
 		CREATE TABLE evento (
-    			id INT PRIMARY KEY AUTO_INCREMENT,
-    			titulo VARCHAR(255) NOT NULL,
-    			descricao TEXT,
-    			categoria VARCHAR(100),
+    		id INT PRIMARY KEY AUTO_INCREMENT,
+    		titulo VARCHAR(255) NOT NULL,
+    		descricao TEXT,
+    		categoria VARCHAR(100),
 	    		data DATE NOT NULL,
 	    		hora TIME NOT NULL,
 	    		duracao VARCHAR(255) NOT NULL,
