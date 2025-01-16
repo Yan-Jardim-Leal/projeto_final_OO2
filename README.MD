@@ -10,7 +10,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 
 ## BD:
 	
-	-- Tabela de usuários
+-- Tabela de usuários
 		CREATE TABLE usuario (
  	   		id INT PRIMARY KEY AUTO_INCREMENT,
  	   		nome_completo VARCHAR(255) NOT NULL,
@@ -19,21 +19,21 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
  	   		tipo VARCHAR(50) NOT NULL -- Tipo do usuário: 'participante' ou 	'administrador'
 		);
 	
-	-- Tabela administradores
+-- Tabela administradores
 		CREATE TABLE administrador (
 	    		id INT PRIMARY KEY REFERENCES usuario(id),
 	    		cargo VARCHAR(100) NOT NULL,
 	    		data_contratado DATE NOT NULL
 		);
 
-	-- Tabela participantes
+-- Tabela participantes
 		CREATE TABLE participante (
 	    		id INT PRIMARY KEY REFERENCES usuario(id),
 	    		cpf VARCHAR(11) UNIQUE NOT NULL,
 	    		data_nascimento DATE NOT NULL
 		);
 
-	-- Tabela eventos
+-- Tabela eventos
 		CREATE TABLE evento (
     			id INT PRIMARY KEY AUTO_INCREMENT,
     			titulo VARCHAR(255) NOT NULL,
@@ -49,7 +49,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 	    		status VARCHAR(50) -- Status do evento: 'ativo', 'cancelado', etc.
 		);
 	
-	-- Tabela para organizadores (relação entre administrador e evento)
+-- Tabela para organizadores (relação entre administrador e evento)
 		CREATE TABLE administrador_evento (
 	    		admin_id INT NOT NULL,
 	    		evento_id INT NOT NULL,
@@ -58,7 +58,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 	    		CONSTRAINT fk_evento FOREIGN KEY (evento_id) REFERENCES evento(id)
 		);
 
-	-- Tabela para participação de participantes nos eventos
+-- Tabela para participação de participantes nos eventos
 		CREATE TABLE participante_evento (
 	    		participante_id INT NOT NULL,
 	    		evento_id INT NOT NULL,
