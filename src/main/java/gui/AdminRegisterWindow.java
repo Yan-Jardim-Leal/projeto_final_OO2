@@ -35,9 +35,6 @@ public class AdminRegisterWindow extends JFrame {
 	private MaskFormatter mascaraData;
 	private JLabel lblDataContracao;
 	private JFormattedTextField formattedTextFieldDataContracao;
-	private JLabel lblTipoUsuario;
-	private JPasswordField passwordFieldSenhaMestra;
-	private JLabel lblSenhaMestra;
 	private JButton btnRegistrar;
 	
 	public static void main(String[] args) {

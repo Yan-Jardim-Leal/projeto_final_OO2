@@ -42,9 +42,6 @@ public class RegisterWindow extends JFrame {
 	private JLabel lblCpf;
 	private JFormattedTextField formattedTextFieldCpf;
 	private MaskFormatter mascaraCpf;
-	private JLabel lblTipoUsuario;
-	private JPasswordField passwordFieldSenhaMestra;
-	private JLabel lblSenhaMestra;
 	private JButton btnRegistrar;
 
 	public RegisterWindow() throws ParseException {
