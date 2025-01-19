@@ -196,7 +196,7 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 		- private MaskFormatter mascaraData;
 		- private JLabel lblDataContracao;
 		- private JFormattedTextField formattedTextFieldDataContracao;
-	 	-private JButton btnRegistrar;
+	 	- private JButton btnRegistrar;
 	
 FALTA:
 Criar relação DAO e SERVICE das palestras
