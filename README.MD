@@ -181,10 +181,22 @@ Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
 		- private JFormattedTextField formattedTextFieldDataNascimento;
 		- private JLabel lblCpf;
 		- private JFormattedTextField formattedTextFieldCpf;
-		- private JLabel lblTipoUsuario;
-		- private JPasswordField passwordFieldSenhaMestra;
-		- private JLabel lblSenhaMestra;
 		- private JButton btnRegistrar;
+
+       AdminRegisterWindow extends JFrame ->
+		- private JPanel contentPane;
+		- private JLabel lblNomeCompleto;
+		- private JTextField textFieldNomeCompleto;
+		- private JLabel lblEmail;
+		- private JTextField textFieldEmail;
+		- private JLabel lblSenha;
+		- private JPasswordField passwordField;
+		- private JLabel lblCargo;
+		- private JFormattedTextField formattedTextFieldCargo;
+		- private MaskFormatter mascaraData;
+		- private JLabel lblDataContracao;
+		- private JFormattedTextField formattedTextFieldDataContracao;
+	 	-private JButton btnRegistrar;
 	
 FALTA:
 Criar relação DAO e SERVICE das palestras
