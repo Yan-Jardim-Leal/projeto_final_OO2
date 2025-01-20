@@ -42,6 +42,14 @@ public abstract class User {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-		
+	
+	public String toString() {
+	    return "User\n" +
+	           "\tID: " + id + ",\n" +
+	           "\tNome: " + nome + ",\n" +
+	           "\tEmail: " + email + ",\n" +
+	           "\tSenha: " + senha;
+	}
+	
 	// ==========================|| ================= ||========================== //
 }

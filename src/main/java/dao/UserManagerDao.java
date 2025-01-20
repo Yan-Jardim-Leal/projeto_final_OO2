@@ -46,14 +46,20 @@ public final class UserManagerDao {
 			BancoDados.finalizarStatement(statement);
 			if (user.getTipo() == UsuarioTipo.ADMIN) {
 				statement = cadastroAdmin((Administrador) user,userId);
-				if (statement == null)
+				if (statement == null) {
+					System.out.println("Não foi possível criar o participante.");
 					throw new SQLException("Não foi possível criar o administrador");
+				}
+					
 				
 		        statement.executeUpdate();
 			}else{
 				statement = cadastroDefault((Participante) user,userId);
-				if (statement == null)
+				if (statement == null) {
+					System.out.println("Não foi possível criar o participante.");
 					throw new SQLException("Não foi possível criar o participante");
+				}
+					
 				
 				statement.executeUpdate();	
 			}
@@ -159,7 +165,6 @@ public final class UserManagerDao {
 		} catch (SQLException erro) {
 			System.out.println("Erro ["+erro+"]");
 		}
-
 		
 		return statement;
 	}

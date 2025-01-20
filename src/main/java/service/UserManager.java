@@ -14,19 +14,25 @@ import exceptions.UsuarioNaoLogadoException;
 public final class UserManager {
 	// ==========================|| FUNÇÕES PÚBLICAS  ||========================== //
 	
-	public static void cadastrarUsuario(User user) throws Exception {
+	public static void registrarUsuario(User user) throws Exception {
 		if (LoginManager.isLogado() && LoginManager.getUsuario().getTipo() != UsuarioTipo.ADMIN)
 			throw new Exception("Um usuário precisa estar deslogado para registrar outro.");
-			
-		User usuarioExistente = getUsuarioByEmail(user.getEmail());
-		
-		if (usuarioExistente != null)
-			throw new Exception("Este Email já está sendo ultilizado.");
 		
 		if (usuariosMaiorQue(0) == true) // Define o primeiro usuário como administrador obrigatóriamente
 			user = (Administrador) user;
 		else
 			user = (Participante) user;
+		
+		cadastrarUsuario(user);
+	}
+	
+	public static void cadastrarUsuario(User user) throws Exception {			
+		User usuarioExistente = getUsuarioByEmail(user.getEmail());
+		
+		System.out.println(usuarioExistente);
+		
+		if (usuarioExistente != null)
+			throw new Exception("Este Email já está sendo ultilizado.");
 		
 		try {
 			// Criar requisitos mínimos para senha depois

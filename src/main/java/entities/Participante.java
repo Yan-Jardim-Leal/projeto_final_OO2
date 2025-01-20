@@ -17,20 +17,24 @@ public final class Participante extends User {
 	}
 	
 	private static char[] cpfNumbers(char[] cpf) {
-		if (cpf == null || cpf.length < 12)
+		if (cpf == null || cpf.length < 13)
 			return null;
 		
 		int charAtual = 0;
-		char[] cpfNumerico = new char[9];
-		
+		char[] cpfNumerico = new char[11]; // 000 . 000 . 000 . 00
+										
 		for (char caractere : cpf) {
 			if ((int) caractere > 47 &&  (int) caractere < 58) {
+				System.out.println("Caractere: " + (char) caractere + "\t O indice é: " + charAtual);
+				
 				cpfNumerico[charAtual] = caractere;
 				charAtual++;
 			}
 		}
 		
-		if (charAtual != 9)
+		System.out.println("O tamanho é: " + charAtual);
+		
+		if (charAtual != 11)
 			return null;
 		
 		return cpfNumerico;
@@ -59,14 +63,19 @@ public final class Participante extends User {
 		// Retorna true se é válido
 		int primeiroDigitoVerificador = verificarCPFEtapa(cpf, 9);
 		
-		if ((int) cpf[9] - 48 != primeiroDigitoVerificador)
+		if ((int) cpf[9] - 48 != primeiroDigitoVerificador) {
+			System.out.println("CPF inválido!");
 			return false;
+		}
 		
 		int segundoDigitoVerificador = verificarCPFEtapa(cpf, 10);
 		
-		if ((int) cpf[10] - 48 != segundoDigitoVerificador)
+		if ((int) cpf[10] - 48 != segundoDigitoVerificador) {
+			System.out.println("CPF inválido!");
 			return false;
-		
+		}
+			
+		System.out.println("CPF validado com sucesso!");
 		return true;
 	}
 	
