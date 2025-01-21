@@ -322,9 +322,9 @@ public final class UserManagerDao {
 	    }
 	    
 	    
-	    System.out.println("A QUANTIDADE: " +quantidade+ " COMPARADO A: "+comparado+ "É: "+ (quantidade > comparado));
+	    System.out.println("[Função UsuariosMaiorQue] " +quantidade+ " < "+comparado+ " = "+ (quantidade < comparado));
 	    
-	    return quantidade > comparado;
+	    return quantidade < comparado;
 	}
 
 		

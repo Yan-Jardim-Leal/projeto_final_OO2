@@ -25,14 +25,14 @@ public final class Participante extends User {
 										
 		for (char caractere : cpf) {
 			if ((int) caractere > 47 &&  (int) caractere < 58) {
-				System.out.println("Caractere: " + (char) caractere + "\t O indice é: " + charAtual);
+				//System.out.println("Caractere: " + (char) caractere + "\t O indice é: " + charAtual);
 				
 				cpfNumerico[charAtual] = caractere;
 				charAtual++;
 			}
 		}
 		
-		System.out.println("O tamanho é: " + charAtual);
+		//System.out.println("O tamanho é: " + charAtual);
 		
 		if (charAtual != 11)
 			return null;
