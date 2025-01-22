@@ -28,6 +28,9 @@ public final class Evento {
 	
 	private double preco;
 	
+	private HashMap<Integer,Administrador> organizadores;
+	private HashMap<Integer,Participante> participantes;
+	
 	public Evento(
 			Integer id,
 			String titulo, 
@@ -59,6 +62,28 @@ public final class Evento {
 		this.preco = preco;
 		this.isLink = isLink;
 		
+		this.organizadores = new HashMap<Integer,Administrador>(); // precisa ter ao menos um organizador.
+		this.participantes = new HashMap<Integer,Participante>();
+	}
+	
+	public void adicionarOrganizador(Administrador admin) {
+		Integer id = admin.getId();
+		
+		this.organizadores.put(id, admin);
+	}
+	
+	public void adicionarParticipante(Participante participante) {
+		Integer id = participante.getId();
+		
+		this.participantes.put(id, participante);
+	}
+	
+	public HashMap<Integer,Administrador> getOrganizadores(){
+		return this.organizadores;
+	}
+	
+	public HashMap<Integer,Participante> getParticipante(){
+		return this.participantes;
 	}
 	
 	public Integer getId() {

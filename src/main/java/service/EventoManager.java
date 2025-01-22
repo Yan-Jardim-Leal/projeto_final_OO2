@@ -1,9 +1,11 @@
 package service;
 
 import java.sql.SQLException;
+import java.util.List;
 
 import dao.EventoManagerDao;
 import entities.Evento;
+import entities.EventoCategoria;
 import entities.User;
 import exceptions.LoginException;
 
@@ -33,16 +35,32 @@ public final class EventoManager { //Não ter o public significa que ela só é 
 		return EventoManagerDao.adicionar(evento);
 	}
 	
-/*
- * 	public static boolean editarEvento(Evento evento,VariavelEvento vEvento) { // Como e o que eu devo poder editar?
-		LoginManager.verAdmin();
-		return EventoManagerDao.editar(evento,vEvento,aEvento);
+	public static boolean editarEvento(Evento evento) throws SQLException, LoginException {
+	    LoginManager.verAdmin();
+	    return EventoManagerDao.editarEvento(evento);
 	}
- */
 	
 	public static boolean excluirEvento(int id) throws SQLException,  LoginException {
 		LoginManager.verAdmin();
 		return EventoManagerDao.excluir(id);
 	}
+	
+	public static List<Evento> buscarEventosPorNome(String nome) throws SQLException, LoginException {
+	    LoginManager.verAdmin();
+	    return EventoManagerDao.buscarEventosPorNome(nome);
+	}
+
+	public static List<Evento> buscarEventosPorCategoria(EventoCategoria categoria) throws SQLException, LoginException {
+	    LoginManager.verAdmin();
+	    return EventoManagerDao.buscarEventosPorCategoria(categoria);
+	}
+	
+	public static void gerarRelatorioAdmin(String caminhoArquivo) throws SQLException, LoginException {
+	    LoginManager.verAdmin();
+	    List<Evento> eventos = EventoManagerDao.listarTodosEventos();
+	    // Implemente a geração do XLS usando uma biblioteca como Apache POI
+	    XLSGenerator.gerarRelatorioEventos(eventos, caminhoArquivo);
+	}
+	
 	// ==========================|| ================= ||========================== //
 }

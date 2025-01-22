@@ -22,7 +22,24 @@
     		<artifactId>commons-logging</artifactId>
     		<version>1.3.4</version>
 		</dependency>
-
+		
+		    <!-- Apache POI para manipulação de Excel (.xls e .xlsx) -->
+    	<dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi</artifactId>
+			<version>5.2.5</version> <!-- Para XLS (formato antigo) -->
+	    </dependency>
+	    <dependency>
+			<groupId>org.apache.poi</groupId>
+			<artifactId>poi-ooxml</artifactId>
+			<version>5.2.5</version> <!-- Para XLSX (formato novo) -->
+ 	   </dependency>
+ 	   <dependency>
+			<groupId>org.apache.xmlbeans</groupId>
+			<artifactId>xmlbeans</artifactId>
+			<version>5.1.1</version> <!-- Necessário para POI -->
+		</dependency>
+		
 	
 		
 
