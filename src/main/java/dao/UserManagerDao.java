@@ -38,10 +38,13 @@ public final class UserManagerDao {
 			
 			ResultSet userIds = statement.getGeneratedKeys();
 			
-			if (userIds.next())
+			if (userIds.next()) {
 				userId = userIds.getInt(1);
-			else
+				user.setId(userId);
+			} else {
 				throw new SQLException("Falha ao obter ID gerado para usuário.");
+			}
+				
 			
 			BancoDados.finalizarStatement(statement);
 			if (user.getTipo() == UsuarioTipo.ADMIN) {

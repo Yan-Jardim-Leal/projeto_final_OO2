@@ -5,8 +5,8 @@ enquanto os administradores criam e gerenciam eles.
 Parte BD: Yan Jardim Leal <br>
 Parte Dao: Yan Jardim Leal <br>
 Parte Service: Yan Jardim Leal <br>
-Parte Interação com a Interface: Rafael Adonis Menon & Gabriel Capri <br>
-Parte Design da Interface: Rafael Adonis Menon & Gabriel Capri <br>
+Parte Entidades: Yan Jardim Leal <br>
+Parte Interface: Rafael Adonis Menon & Gabriel Capri <br>
 
 ## BD:
 	

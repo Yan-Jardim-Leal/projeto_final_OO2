@@ -1,7 +1,7 @@
 package entities;
 
 public abstract class User {
-	// ==========================||     VARIÁVEIS     ||========================== //]
+	// ==========================||     VARIÁVEIS     ||========================== //
 	protected Integer id;
 	
 	protected String nome;
@@ -41,6 +41,10 @@ public abstract class User {
 	
 	public void setSenha(String senha) {
 		this.senha = senha;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public String toString() {

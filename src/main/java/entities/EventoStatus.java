@@ -15,4 +15,13 @@ public enum EventoStatus {
 	public String getSQL() {
 		return this.sqlName;
 	}
+	
+	public static EventoStatus getFromString(String tipoString) {
+		for (EventoStatus tipo : EventoStatus.values()) 
+			if (tipo.getSQL().equals(tipoString))
+				return tipo;
+		
+		return null;
+	}
+	
 }

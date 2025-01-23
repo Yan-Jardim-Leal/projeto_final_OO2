@@ -3,9 +3,11 @@ package entities;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 
-@SuppressWarnings("unused")
+//@SuppressWarnings("unused")
 public final class Evento {
 	// status (fechado, aberto, encerrado ou cancelado)
 	// categoria (palestra, workshop ou conferência)
@@ -46,7 +48,10 @@ public final class Evento {
 			int capacidadeMaxima,
 			EventoCategoria categoria,
 			EventoStatus status,
-			double preco
+			double preco,
+			
+			HashMap<Integer,Administrador> organizadores,
+			HashMap<Integer,Participante> participantes
 			) {
 		
 		this.id = id;
@@ -62,8 +67,8 @@ public final class Evento {
 		this.preco = preco;
 		this.isLink = isLink;
 		
-		this.organizadores = new HashMap<Integer,Administrador>(); // precisa ter ao menos um organizador.
-		this.participantes = new HashMap<Integer,Participante>();
+		this.organizadores = organizadores; // precisa ter ao menos um organizador.
+		this.participantes = participantes;
 	}
 	
 	public void adicionarOrganizador(Administrador admin) {
@@ -78,11 +83,19 @@ public final class Evento {
 		this.participantes.put(id, participante);
 	}
 	
+	public boolean removerOrganizador(Integer id) {
+	    return this.organizadores.remove(id) != null;
+	}
+
+	public boolean removerParticipante(Integer id) {
+	    return this.participantes.remove(id) != null;
+	}
+	
 	public HashMap<Integer,Administrador> getOrganizadores(){
 		return this.organizadores;
 	}
 	
-	public HashMap<Integer,Participante> getParticipante(){
+	public HashMap<Integer,Participante> getParticipantes(){
 		return this.participantes;
 	}
 	
@@ -132,6 +145,82 @@ public final class Evento {
 
 	public double getPreco() {
 		return preco;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public void setDataEvento(Date dataEvento) {
+	    LocalDate dataAtual = LocalDate.now();
+	    LocalDate dataEventoInserida = dataEvento.toLocalDate();
+	    
+	    if (dataEventoInserida.isBefore(dataAtual)) {
+	        throw new IllegalArgumentException("Data do evento não pode ser no passado.");
+	    }
+	    this.dataEvento = dataEvento;
+	}
+
+	public void setHoraEvento(Time horaEvento) {
+	    // Combina data do evento com a hora fornecida
+	    LocalDateTime dataHoraEvento = LocalDateTime.of(
+	        this.dataEvento.toLocalDate(), 
+	        horaEvento.toLocalTime()
+	    );
+	    
+	    LocalDateTime agora = LocalDateTime.now();
+	    LocalDateTime umaHoraAFrente = agora.plusHours(1);
+	    
+	    if (dataHoraEvento.isBefore(umaHoraAFrente)) {
+	        throw new IllegalArgumentException(
+	            "Horário do evento deve ser pelo menos 1 hora a partir de agora."
+	        );
+	    }
+	    this.horaEvento = horaEvento;
+	}
+
+	public void setDuracaoEvento(Duration duracaoEvento) {
+		this.duracaoEvento = duracaoEvento;
+	}
+
+	public void setLink(boolean isLink) {
+		this.isLink = isLink;
+	}
+
+	public void setLocal(String local) {
+		this.local = local;
+	}
+
+	public void setCapacidadeMaxima(int capacidadeMaxima) {
+		this.capacidadeMaxima = capacidadeMaxima;
+	}
+
+	public void setCategoria(EventoCategoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public void setStatus(EventoStatus status) {
+		this.status = status;
+	}
+
+	public void setPreco(double preco) {
+		this.preco = preco;
+	}
+
+	public void setOrganizadores(HashMap<Integer, Administrador> organizadores) {
+		this.organizadores = organizadores;
+	}
+
+	public void setParticipantes(HashMap<Integer, Participante> participantes) {
+		this.participantes = participantes;
 	}
 	
 }

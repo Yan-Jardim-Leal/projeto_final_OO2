@@ -16,17 +16,17 @@ public final class EventoManager { //Não ter o public significa que ela só é 
 	// ==========================||      USUÁRIOS     ||========================== //
 	public static boolean participarEvento(User user, Evento evento) throws LoginException, SQLException {
 		LoginManager.verParticipante();
-		return EventoManagerDao.adicionarParticipanteEvento(user, evento.getId());
+		return EventoManagerDao.adicionarParticipanteEvento(user.getId(), evento.getId());
 	}
 	
-	public static boolean confirmarPresenca(User user, Evento evento) throws LoginException, SQLException {
+	public static boolean confirmarPresenca(User user, Evento evento) throws Exception {
 		LoginManager.verParticipante();
-		return EventoManagerDao.confirmarPresencaEvento(user, evento.getId());
+		return EventoManagerDao.confirmarPresencaEvento(user.getId(), evento.getId());
 	}
 	
-	public static boolean sairEvento(User user, Evento evento) throws LoginException, SQLException {
+	public static boolean sairEvento(User user, Evento evento) throws Exception {
 		LoginManager.verParticipante();
-		return EventoManagerDao.sairParticipanteEvento(user, evento.getId());
+		return EventoManagerDao.sairParticipanteEvento(user.getId(), evento.getId());
 	}
 	
 	// ==========================||  ADMINISTRADORES  ||========================== //
@@ -37,7 +37,7 @@ public final class EventoManager { //Não ter o public significa que ela só é 
 	
 	public static boolean editarEvento(Evento evento) throws SQLException, LoginException {
 	    LoginManager.verAdmin();
-	    return EventoManagerDao.editarEvento(evento);
+	    return EventoManagerDao.editar(evento);
 	}
 	
 	public static boolean excluirEvento(int id) throws SQLException,  LoginException {
@@ -45,21 +45,21 @@ public final class EventoManager { //Não ter o public significa que ela só é 
 		return EventoManagerDao.excluir(id);
 	}
 	
-	public static List<Evento> buscarEventosPorNome(String nome) throws SQLException, LoginException {
+	public static List<Evento> buscarEventosPorNome(String nome) throws Exception {
 	    LoginManager.verAdmin();
 	    return EventoManagerDao.buscarEventosPorNome(nome);
 	}
 
-	public static List<Evento> buscarEventosPorCategoria(EventoCategoria categoria) throws SQLException, LoginException {
+	public static List<Evento> buscarEventosPorCategoria(EventoCategoria categoria) throws Exception {
 	    LoginManager.verAdmin();
 	    return EventoManagerDao.buscarEventosPorCategoria(categoria);
 	}
 	
-	public static void gerarRelatorioAdmin(String caminhoArquivo) throws SQLException, LoginException {
+	public static void gerarRelatorioAdmin(String caminhoArquivo) throws Exception {
 	    LoginManager.verAdmin();
 	    List<Evento> eventos = EventoManagerDao.listarTodosEventos();
 	    // Implemente a geração do XLS usando uma biblioteca como Apache POI
-	    XLSGenerator.gerarRelatorioEventos(eventos, caminhoArquivo);
+	    //XLSGenerator.gerarRelatorioEventos(eventos, caminhoArquivo);
 	}
 	
 	// ==========================|| ================= ||========================== //

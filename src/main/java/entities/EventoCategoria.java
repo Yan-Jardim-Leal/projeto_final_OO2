@@ -14,4 +14,13 @@ public enum EventoCategoria {
 	public String getSQL() {
 		return this.sqlName;
 	}
+	
+	public static EventoCategoria getFromString(String tipoString) {
+		for (EventoCategoria tipo : EventoCategoria.values()) 
+			if (tipo.getSQL().equals(tipoString))
+				return tipo;
+		
+		return null;
+	}
+	
 }
