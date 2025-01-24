@@ -56,6 +56,20 @@ public final class UserManager {
 		return UserManagerDao.UsuariosMaiorQue(quantidade); 
 	}
 	
+	// ==========================|| FUNÇÕES DE ADMIN  ||========================== //
+	
+	public static void cadastrarAdministrador(Administrador user) throws Exception {
+		LoginManager.verAdmin();
+		
+		try {
+			// Criar requisitos mínimos para senha depois
+			user.setSenha(encriptarSenha(user.getSenha()));
+			UserManagerDao.cadastrar(user);
+		} catch (Exception erro) {
+			throw new Exception("Não foi possível cadastrar o administrador ["+erro+"]");
+		}
+	}
+	
 	// ==========================|| FUNÇÕES PRIVADAS  ||========================== //
 	
 	private static String encriptarSenha(String senha) {

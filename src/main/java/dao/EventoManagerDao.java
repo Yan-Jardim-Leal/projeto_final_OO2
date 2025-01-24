@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.sql.StatementEvent;
-
 import entities.Administrador;
 import entities.Evento;
 import entities.EventoCategoria;
@@ -41,6 +39,8 @@ public final class EventoManagerDao {
 	        if (evento.getId() != null) {
 	            return false;
 	        }
+	        
+	        System.out.println("A tabela está vazia: "+ evento.getOrganizadores().isEmpty());
 	        
 	        if (evento.getOrganizadores().isEmpty()) { // <--- VALIDAÇÃO NOVA
 	            throw new SQLException("Evento deve ter pelo menos 1 organizador.");
@@ -89,84 +89,63 @@ public final class EventoManagerDao {
 	                evento.setId(novoEventoId);
 	                
 	                // Adiciona administradores associados ao evento
+
 	                for (Administrador admin : evento.getOrganizadores().values()) {
 	                    if (!adicionarAdministradorEvento(admin.getId(), novoEventoId)) {
 	                        throw new SQLException("Falha ao adicionar administrador " + admin.getId());
 	                    }
 	                }
 
-	                // Adiciona participantes pré-cadastrados
 	                for (Participante participante : evento.getParticipantes().values()) {
 	                    if (!adicionarParticipanteEvento(participante.getId(), novoEventoId)) {
 	                        throw new SQLException("Falha ao adicionar participante " + participante.getId());
 	                    }
 	                }
+
 	            } else {
 	                throw new SQLException("Nenhum ID gerado para o evento");
 	            }
 	        }
 
-	        conexaoBD.commit(); // Confirma transação
+	        conexaoBD.commit();
 	        return true;
-
+ 
 	    } catch (SQLException erro) {
 	    	conexaoBD.rollback();
 	        System.out.println("Erro ao adicionar evento [" + erro.getMessage() + "]");
 	        return false;
 	    } finally {
+	    	conexaoBD.setAutoCommit(true);
 	        BancoDados.finalizarStatement(statement);
-	        conexaoBD.setAutoCommit(true); // Restaura auto-commit
 	    }
 	}
 	
 	public static boolean adicionarParticipanteEvento(int participanteId, int eventoId) throws SQLException {
 	    PreparedStatement statement = null;
 	    try {
-	        conexaoBD.setAutoCommit(false); // Desativa o auto-commit
-	        
 	        String sql = "INSERT INTO participante_evento (participante_id, evento_id, confirmou_presenca) VALUES (?, ?, ?)";
 	        statement = conexaoBD.prepareStatement(sql);
-	        
 	        statement.setInt(1, participanteId);
 	        statement.setInt(2, eventoId);
-	        statement.setBoolean(3, false); // Presença inicia como false
+	        statement.setBoolean(3, false);
+	        return statement.executeUpdate() > 0; // Não gerencia transação!
 	        
-	        int rowsAffected = statement.executeUpdate();
-	        conexaoBD.commit(); // Confirma a transação
-	        return rowsAffected > 0;
-	        
-	    } catch (SQLException erro) {
-	    	conexaoBD.rollback();
-	        System.out.println("Erro ao adicionar participante ao evento [" + erro + "]");
-	        return false;
 	    } finally {
-	        BancoDados.finalizarStatement(statement); // Fecha o statement
-	        conexaoBD.setAutoCommit(true);
+	        BancoDados.finalizarStatement(statement);
 	    }
 	}
-	
+
 	public static boolean adicionarAdministradorEvento(int adminId, int eventoId) throws SQLException {
 	    PreparedStatement statement = null;
 	    try {
-	        conexaoBD.setAutoCommit(false); 
-	        
 	        String sql = "INSERT INTO administrador_evento (admin_id, evento_id) VALUES (?, ?)";
 	        statement = conexaoBD.prepareStatement(sql);
-	        
 	        statement.setInt(1, adminId);
 	        statement.setInt(2, eventoId);
+	        return statement.executeUpdate() > 0; // Não gerencia transação!
 	        
-	        int rowsAffected = statement.executeUpdate();
-	        conexaoBD.commit();
-	        return rowsAffected > 0;
-	        
-	    } catch (SQLException erro) {
-	    	conexaoBD.rollback();
-	        System.out.println("Erro ao associar administrador ao evento [" + erro + "]");
-	        return false;
 	    } finally {
 	        BancoDados.finalizarStatement(statement);
-	        conexaoBD.setAutoCommit(true);
 	    }
 	}
 	
@@ -665,7 +644,37 @@ public final class EventoManagerDao {
 	        participantes
 	    );
 	}
+	
+	public static List<Evento> getEventosCadastrados(int userId) throws Exception {
+	    List<Evento> eventos = new ArrayList<>();
+	    PreparedStatement statement = null;
+	    ResultSet resultado = null;
 
+	    try {
+	        String sql = "SELECT e.* FROM evento e " +
+	                     "LEFT JOIN administrador_evento ae ON e.id = ae.evento_id " +
+	                     "LEFT JOIN participante_evento pe ON e.id = pe.evento_id " +
+	                     "WHERE ae.admin_id = ? OR pe.participante_id = ?";
+	        
+	        statement = conexaoBD.prepareStatement(sql);
+	        statement.setInt(1, userId);
+	        statement.setInt(2, userId);
+
+	        resultado = statement.executeQuery();
+
+	        // Mapeia os resultados para objetos Evento
+	        while (resultado.next()) {
+	            Evento evento = mapearEventoDoResultSet(resultado);
+	            eventos.add(evento);
+	        }
+
+	        return eventos;
+	    } finally {
+	        BancoDados.finalizarResultSet(resultado);
+	        BancoDados.finalizarStatement(statement);
+	    }
+	}
+	
 	// ==========================|| ================= ||========================== //
 	
 }

@@ -21,6 +21,13 @@ public final class UserManagerDao {
 	}
 	
 	public static boolean cadastrar(User user) throws Exception {
+		
+		if (user.getId() != null && getUserPorId(user.getId()) != null)
+			throw new SQLException("Id deve ser null");
+		
+		if (getUserPorEmail(user.getEmail()) != null)
+			throw new SQLException("Email já está em uso");
+		
 		PreparedStatement statement = null;
 		int userId;
 		

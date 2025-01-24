@@ -1,9 +1,9 @@
 package yan.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.Date;
@@ -18,7 +18,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import dao.BancoDados;
@@ -69,16 +68,16 @@ class EventoManagerDaoTeste {
         assertNotNull(eventoRecuperado, "Evento não foi encontrado após inserção");
     }
 
-    @Disabled
-    void testAdicionarEventoSemOrganizadores() {
+    @Test
+    void testAdicionarEventoSemOrganizadores() throws SQLException {
+    	System.out.println("====================================> testAdicionarEventoSemOrganizadores");
         eventoTeste.getOrganizadores().clear();
         eventoTeste.removerOrganizador(adminTeste.getId());
         
-        assertThrows(SQLException.class, () -> {
-            EventoManagerDao.adicionar(eventoTeste);
-        }, "Deveria falhar ao adicionar evento sem organizadores");
+        assertFalse(EventoManagerDao.adicionar(eventoTeste), "Deveria falhar ao adicionar evento sem organizadores");
         
         eventoTeste.adicionarOrganizador(adminTeste);
+        System.out.println("====================================> /testAdicionarEventoSemOrganizadores");
     }
     
     @Test

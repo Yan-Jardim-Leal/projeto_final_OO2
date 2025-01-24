@@ -3,8 +3,10 @@ package service;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import dao.UserManagerDao;
+
 import entities.User;
 import entities.UsuarioTipo;
+
 import exceptions.CredenciaisInvalidasException;
 import exceptions.LoginException;
 import exceptions.UsuarioJaLogadoException;

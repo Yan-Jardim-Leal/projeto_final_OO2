@@ -3,6 +3,7 @@ package entities;
 public enum EventoStatus {
 	ABERTO("aberto"),
 	FECHADO("fechado"),
+	ANDAMENTO("andamento"),
 	ENCERRADO("encerrado"),
 	CANCELADO("cancelado");
 	

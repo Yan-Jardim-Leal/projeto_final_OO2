@@ -1,11 +1,10 @@
 package service.main;
 
-import java.sql.Date;
+import java.sql.SQLException;
 
 import dao.BancoDados;
-import entities.Administrador;
+import service.AtualizadorStatusEvento;
 import service.LoginManager;
-import service.UserManager;
 
 public class Main {
 	
@@ -13,11 +12,12 @@ public class Main {
 		
 		int tentativas = 0;
 		boolean sucesso = false;
-		
+
 		while (sucesso == false && tentativas < 3) {
 			
 			try {
 				BancoDados.conectar();
+				AtualizadorStatusEvento.iniciarAtualizacao();
 				System.out.println("Banco de dados conectado com sucesso!");
 				sucesso = true;
 			} catch (Exception erro) {
@@ -29,19 +29,28 @@ public class Main {
 		}
 		
 		if (tentativas >= 3) {
-			System.err.println("Aplicação falhou em iniciar, não foi possível se conectar ao banco de dados.");
+			System.out.println("Aplicação falhou em iniciar, não foi possível se conectar ao banco de dados.");
 			return;
 		}
 		
-		try {									 //Integer id, String nome, String senha, String email, String cargo, Date dataContratado
+		try {
 			LoginManager.login("yan2005leal@gmail.com", "senhalegal123@");
-			LoginManager.logOff();
-			//System.out.println("Login realizado com sucesso");
+			//LoginManager.logOff();
 		} catch (Exception erro) {
-			System.err.println("Não foi possível cadastrar o usuário [ " + erro + " ]");
-			//System.err.println("Não foi possível fazer login com o usuário [ " + erro + " ]");
+			System.out.println("Não foi possível cadastrar o usuário [ " + erro + " ]");
 			throw erro;
 		}
 		
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+		    AtualizadorStatusEvento.pararAtualizacao();
+		    try {
+				BancoDados.desconectar();
+			} catch (SQLException erro) {
+				erro.printStackTrace();
+			}
+		}));
+		
 	}
 }
+
+
