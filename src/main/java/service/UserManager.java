@@ -18,7 +18,7 @@ public final class UserManager {
 		if (LoginManager.isLogado() && LoginManager.getUsuario().getTipo() != UsuarioTipo.ADMIN)
 			throw new Exception("Um usuário precisa estar deslogado para registrar outro.");
 		
-		if (usuariosMaiorQue(0) == true) // Define o primeiro usuário como administrador obrigatóriamente
+		if (usuariosMaiorQue(0) == false) // Define o primeiro usuário como administrador obrigatóriamente
 			user = (Administrador) user;
 		else
 			user = (Participante) user;
@@ -38,6 +38,7 @@ public final class UserManager {
 			// Criar requisitos mínimos para senha depois
 			user.setSenha(encriptarSenha(user.getSenha()));
 			UserManagerDao.cadastrar(user);
+			System.out.println("Usuário cadastrado com sucesso! Usuário: " + user);
 		} catch (Exception erro) {
 			throw new Exception("Não foi possível cadastrar o usuário ["+erro+"]");
 		}

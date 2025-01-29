@@ -243,72 +243,68 @@ public final class UserManagerDao {
 }
 	
 	public static User getUserPorId(int id) throws Exception {
-		PreparedStatement statement = null;
-		ResultSet resultado = null;
-		
-		String email;
-		String nome;
-		String senha;
-		String tipo;
-		
-		User user = null;
-		
-		try {
-			statement = conexaoBD.prepareStatement("SELECT email, nome_completo, senha, tipo FROM usuario WHERE email LIKE ?");
-			statement.setInt(1, id);
-			resultado = statement.executeQuery();
-			
-			if (resultado.next()) {
-				
-				email 	= resultado.getString("email");
-				nome 	= resultado.getString("nome_completo");
-				senha 	= resultado.getString("senha");
-				tipo 	= resultado.getString("tipo");
-				
-				BancoDados.finalizarResultSet(resultado);
-				BancoDados.finalizarStatement(statement);
-				
-				if (UsuarioTipo.getFromString(tipo) == UsuarioTipo.ADMIN) {
-					statement = conexaoBD.prepareStatement("SELECT data_contratado,cargo FROM admin WHERE admin.id = ?");
-					statement.setInt(1, id);
-					resultado = statement.executeQuery();
-					
-					Date dataContratado;
-					String cargo;
-					
-					dataContratado  = resultado.getDate("data_contratado");
-					cargo = resultado.getString("cargo");
-					
-					user = (Administrador) new Administrador(id, nome, senha, email, cargo, dataContratado);
-					
-				} else {
-					statement = conexaoBD.prepareStatement("SELECT data_nascimento,cpf FROM participante WHERE participante.id = ?");
-					statement.setInt(1, id);
-					resultado = statement.executeQuery();
-					
-					Date dataNascimento;
-					String cpf;
-					
-					dataNascimento = resultado.getDate("data_nascimento");
-					cpf = resultado.getString("cpf");
-					
-					user = (Participante) new Participante(id, nome, senha, email, cpf, dataNascimento);
-				}
-				
-				BancoDados.finalizarResultSet(resultado);
-				BancoDados.finalizarStatement(statement);
-				
-			}else {
-				System.out.println("Usuário com esse Email não encontrado!");
-			}
-		}finally {
-			BancoDados.finalizarResultSet(resultado);
-			BancoDados.finalizarStatement(statement);
-		}
-		
-		return user;
+	    PreparedStatement statement = null;
+	    ResultSet resultado = null;
+
+	    User user = null;
+
+	    try {
+	        // Consulta na tabela usuario
+	        statement = conexaoBD.prepareStatement("SELECT email, nome_completo, senha, tipo FROM usuario WHERE id = ?");
+	        statement.setInt(1, id);
+	        resultado = statement.executeQuery();
+
+	        if (resultado.next()) {
+	            String email = resultado.getString("email");
+	            String nome = resultado.getString("nome_completo");
+	            String senha = resultado.getString("senha");
+	            String tipo = resultado.getString("tipo");
+
+	            // Determina o tipo de usuário
+	            if (UsuarioTipo.getFromString(tipo) == UsuarioTipo.ADMIN) {
+	                BancoDados.finalizarResultSet(resultado);
+	                BancoDados.finalizarStatement(statement);
+
+	                // Consulta adicional para administrador
+	                statement = conexaoBD.prepareStatement("SELECT data_contratado, cargo FROM administrador WHERE id = ?");
+	                statement.setInt(1, id);
+	                resultado = statement.executeQuery();
+
+	                if (resultado.next()) {
+	                    String cargo = resultado.getString("cargo");
+	                    Date dataContratado = resultado.getDate("data_contratado");
+
+	                    user = new Administrador(id, nome, senha, email, cargo, dataContratado);
+	                }
+	            } else {
+	                BancoDados.finalizarResultSet(resultado);
+	                BancoDados.finalizarStatement(statement);
+
+	                // Consulta adicional para participante
+	                statement = conexaoBD.prepareStatement("SELECT data_nascimento, cpf FROM participante WHERE id = ?");
+	                statement.setInt(1, id);
+	                resultado = statement.executeQuery();
+
+	                if (resultado.next()) {
+	                    String cpf = resultado.getString("cpf");
+	                    Date dataNascimento = resultado.getDate("data_nascimento");
+
+	                    user = new Participante(id, nome, senha, email, cpf, dataNascimento);
+	                }
+	            }
+	        } else {
+	            System.out.println("Usuário com esse email não encontrado!");
+	        }
+	    } catch (SQLException erro) {
+	        throw new Exception("Erro ao buscar usuário por email: " + erro.getMessage(), erro);
+	    } finally {
+	        BancoDados.finalizarResultSet(resultado);
+	        BancoDados.finalizarStatement(statement);
+	    }
+
+	    return user;
 	}
-	
+
 	public static boolean UsuariosMaiorQue(int quantidade) throws Exception {
 	    PreparedStatement statement = null;
 	    ResultSet resultado = null;

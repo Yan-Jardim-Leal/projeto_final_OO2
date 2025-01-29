@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -129,7 +130,8 @@ public final class EventoManagerDao {
 	        statement.setInt(2, eventoId);
 	        statement.setBoolean(3, false);
 	        return statement.executeUpdate() > 0; // Não gerencia transação!
-	        
+	    } catch (SQLIntegrityConstraintViolationException erro) {
+	    	return false;
 	    } finally {
 	        BancoDados.finalizarStatement(statement);
 	    }
@@ -533,6 +535,35 @@ public final class EventoManagerDao {
 	            System.out.println("Nenhum evento encontrado com ID: " + id);
 	            return null;
 	        }
+	    } finally {
+	        BancoDados.finalizarResultSet(resultado);
+	        BancoDados.finalizarStatement(statement);
+	    }
+	}
+	
+	public static boolean getEventoConfirmado(int userId, int eventoId) throws SQLException {
+	    PreparedStatement statement = null;
+	    ResultSet resultado = null;
+
+	    try {
+	        // Query inclui o campo "id" para compatibilidade com mapearEventoDoResultSet
+	        statement = conexaoBD.prepareStatement(
+	            "SELECT confirmou_presenca FROM participante_evento WHERE participante_id = ? AND evento_id = ?"
+	        );
+	        statement.setInt(1, userId);
+	        statement.setInt(2, eventoId);
+	        
+	        resultado = statement.executeQuery();
+	        
+	        if (resultado.next()) {
+	        	return resultado.getBoolean("confirmou_presenca");
+	        } else {
+	            System.out.println("Nenhum evento encontrado com ID: " + eventoId);
+	            return false;
+	        }
+	    } catch (SQLException erro) {
+	    	System.out.println("Não foi possível determinar a confirmação do usuário, erro: "+ erro);
+	        return false;
 	    } finally {
 	        BancoDados.finalizarResultSet(resultado);
 	        BancoDados.finalizarStatement(statement);

@@ -1,23 +1,19 @@
-package util;
+package service;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-
-import entities.Evento;
+import org.apache.poi.ss.usermodel.*;
+import entities.*;
+import dao.EventoManagerDao;
 
 public class XLSGenerator {
 
-    // Formatters para datas e horas
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
@@ -27,62 +23,44 @@ public class XLSGenerator {
             // Sheet 1: Informações do Evento
             Sheet sheetEvento = workbook.createSheet("Informações do Evento");
             preencherDadosEvento(sheetEvento, workbook, evento);
-
+            
             // Sheet 2: Organizadores
             Sheet sheetOrganizadores = workbook.createSheet("Organizadores");
-            preencherOrganizadores(sheetOrganizadores, evento);
-
+            preencherOrganizadores(sheetOrganizadores, workbook, evento);
+            
             // Sheet 3: Participantes
             Sheet sheetParticipantes = workbook.createSheet("Participantes");
-            preencherParticipantes(sheetParticipantes, evento);
+            preencherParticipantesAdmin(sheetParticipantes, workbook, evento);
 
-            // Salva o arquivo
-            try (FileOutputStream outputStream = new FileOutputStream(caminhoArquivo)) {
-                workbook.write(outputStream);
-            }
+            salvarArquivo(workbook, caminhoArquivo);
         }
     }
 
     // ==========================|| RELATÓRIO PARTICIPANTE ||========================== //
-    public static void gerarRelatorioParticipante(Evento evento, String caminhoArquivo) throws IOException {
+    public static void gerarRelatorioParticipante(Evento evento, int idParticipante, String caminhoArquivo) 
+            throws IOException, SQLException {
+        
         try (Workbook workbook = new HSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Meu Evento");
-
+            
             // Informações do Evento
             preencherDadosEvento(sheet, workbook, evento);
-
+            
             // Organizadores
-            int rowNum = sheet.getLastRowNum() + 2;
-            Row headerOrg = sheet.createRow(rowNum++);
-            headerOrg.createCell(0).setCellValue("Organizadores do Evento:");
-            preencherOrganizadores(sheet, rowNum, evento);
-
+            adicionarSecaoOrganizadores(sheet, workbook, evento);
+            
             // Presença do Participante
-            rowNum = sheet.getLastRowNum() + 2;
-            Row headerPresenca = sheet.createRow(rowNum++);
-            headerPresenca.createCell(0).setCellValue("Sua Presença:");
-            Row presencaRow = sheet.createRow(rowNum);
-            presencaRow.createCell(0).setCellValue("Confirmada?");
-            presencaRow.createCell(1).setCellValue(evento.getParticipantes().get(evento.getId()).isPresencaConfirmada());
+            adicionarSecaoPresenca(sheet, evento, idParticipante);
 
-            // Salva o arquivo
-            try (FileOutputStream outputStream = new FileOutputStream(caminhoArquivo)) {
-                workbook.write(outputStream);
-            }
+            salvarArquivo(workbook, caminhoArquivo);
         }
     }
 
     // ==========================|| MÉTODOS AUXILIARES ||========================== //
     private static void preencherDadosEvento(Sheet sheet, Workbook workbook, Evento evento) {
-        String[] headers = {
-            "Título", "Descrição", "Data", "Hora", "Duração", 
-            "Local", "Categoria", "Status", "Preço", "Capacidade"
-        };
-
-        // Estilo para cabeçalho
+        String[] headers = {"Título", "Descrição", "Data", "Hora", "Duração", "Local", "Categoria", "Status", "Preço", "Capacidade"};
         CellStyle headerStyle = criarEstiloCabecalho(workbook);
 
-        // Cabeçalho
         Row headerRow = sheet.createRow(0);
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
@@ -90,7 +68,6 @@ public class XLSGenerator {
             cell.setCellStyle(headerStyle);
         }
 
-        // Dados
         Row dataRow = sheet.createRow(1);
         dataRow.createCell(0).setCellValue(evento.getTitulo());
         dataRow.createCell(1).setCellValue(evento.getDescricao());
@@ -102,45 +79,106 @@ public class XLSGenerator {
         dataRow.createCell(7).setCellValue(evento.getStatus().toString());
         dataRow.createCell(8).setCellValue(evento.getPreco());
         dataRow.createCell(9).setCellValue(evento.getCapacidadeMaxima());
+
+        autoAjustarColunas(sheet, headers.length);
     }
 
-    private static void preencherOrganizadores(Sheet sheet, Evento evento) {
+    private static void preencherOrganizadores(Sheet sheet, Workbook workbook, Evento evento) {
         String[] headers = {"ID", "Nome", "Email", "Cargo"};
-        preencherDados(sheet, headers, evento.getOrganizadores().values().stream()
-            .map(org -> new String[]{
-                String.valueOf(org.getId()),
-                org.getNome(),
-                org.getEmail(),
-                org.getCargo()
-            }).toArray(String[][]::new));
-    }
-
-    private static void preencherParticipantes(Sheet sheet, Evento evento) {
-        String[] headers = {"ID", "Nome", "Email", "CPF", "Presença Confirmada"};
-        preencherDados(sheet, headers, evento.getParticipantes().values().stream()
-            .map(part -> new String[]{
-                String.valueOf(part.getId()),
-                part.getNome(),
-                part.getEmail(),
-                part.getCpf(),
-                part.isPresencaConfirmada() ? "Sim" : "Não"
-            }).toArray(String[][]::new));
-    }
-
-    private static void preencherDados(Sheet sheet, String[] headers, String[][] dados) {
-        // Implementação genérica para preencher qualquer lista
+        CellStyle headerStyle = criarEstiloCabecalho(workbook);
+        
         Row headerRow = sheet.createRow(0);
         for (int i = 0; i < headers.length; i++) {
-            headerRow.createCell(i).setCellValue(headers[i]);
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
         }
 
+        HashMap<Integer, Administrador> organizadores = evento.getOrganizadores();
         int rowNum = 1;
-        for (String[] linha : dados) {
+        for (Administrador org : organizadores.values()) {
             Row row = sheet.createRow(rowNum++);
-            for (int i = 0; i < linha.length; i++) {
-                row.createCell(i).setCellValue(linha[i]);
+            row.createCell(0).setCellValue(org.getId());
+            row.createCell(1).setCellValue(org.getNome());
+            row.createCell(2).setCellValue(org.getEmail());
+            row.createCell(3).setCellValue(org.getCargo());
+        }
+
+        autoAjustarColunas(sheet, headers.length);
+    }
+
+    private static void preencherParticipantesAdmin(Sheet sheet, Workbook workbook, Evento evento) {
+        String[] headers = {"ID", "Nome", "Email", "CPF", "Presença Confirmada"};
+        CellStyle headerStyle = criarEstiloCabecalho(workbook);
+        
+        Row headerRow = sheet.createRow(0);
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
+        }
+
+        HashMap<Integer, Participante> participantes = evento.getParticipantes();
+        int rowNum = 1;
+        for (Participante part : participantes.values()) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(part.getId());
+            row.createCell(1).setCellValue(part.getNome());
+            row.createCell(2).setCellValue(part.getEmail());
+            row.createCell(3).setCellValue(part.getCpf());
+            
+            try {
+                boolean presenca = EventoManagerDao.getEventoConfirmado(part.getId(), evento.getId());
+                row.createCell(4).setCellValue(presenca ? "Sim" : "Não");
+            } catch (SQLException e) {
+                row.createCell(4).setCellValue("Erro ao verificar");
             }
         }
+
+        autoAjustarColunas(sheet, headers.length);
+        System.out.println("Sessão dos participantes adicionada!");
+    }
+
+    private static void adicionarSecaoOrganizadores(Sheet sheet, Workbook workbook, Evento evento) {
+        int startRow = sheet.getLastRowNum() + 2;
+        Row tituloRow = sheet.createRow(startRow);
+        tituloRow.createCell(0).setCellValue("Organizadores do Evento:");
+        
+        String[] headers = {"ID", "Nome", "Email", "Cargo"};
+        CellStyle headerStyle = criarEstiloCabecalho(workbook);
+        
+        Row headerRow = sheet.createRow(startRow + 1);
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
+            cell.setCellStyle(headerStyle);
+        }
+
+        HashMap<Integer, Administrador> organizadores = evento.getOrganizadores();
+        int rowNum = startRow + 2;
+        for (Administrador org : organizadores.values()) {
+            Row row = sheet.createRow(rowNum++);
+            row.createCell(0).setCellValue(org.getId());
+            row.createCell(1).setCellValue(org.getNome());
+            row.createCell(2).setCellValue(org.getEmail());
+            row.createCell(3).setCellValue(org.getCargo());
+        }
+
+        autoAjustarColunas(sheet, headers.length);
+        System.out.println("Sessão dos organizadores adicionada!");
+    }
+
+    private static void adicionarSecaoPresenca(Sheet sheet, Evento evento, int idParticipante) throws SQLException {
+        int startRow = sheet.getLastRowNum() + 2;
+        Row tituloRow = sheet.createRow(startRow);
+        tituloRow.createCell(0).setCellValue("Sua Presença:");
+        
+        boolean presenca = EventoManagerDao.getEventoConfirmado(idParticipante, evento.getId());
+        Row presencaRow = sheet.createRow(startRow + 1);
+        presencaRow.createCell(0).setCellValue("Confirmada?");
+        presencaRow.createCell(1).setCellValue(presenca ? "Sim" : "Não");
+        
+        System.out.println("Sessão da presença adicionada!");
     }
 
     private static CellStyle criarEstiloCabecalho(Workbook workbook) {
@@ -151,9 +189,22 @@ public class XLSGenerator {
         return style;
     }
 
+    private static void autoAjustarColunas(Sheet sheet, int numColumns) {
+        for (int i = 0; i < numColumns; i++) {
+            sheet.autoSizeColumn(i);
+        }
+    }
+
     private static String formatarDuracao(Duration duracao) {
+        if (duracao == null) return "0 horas";
         long horas = duracao.toHours();
         long minutos = duracao.toMinutesPart();
         return String.format("%d horas e %d minutos", horas, minutos);
+    }
+
+    private static void salvarArquivo(Workbook workbook, String caminho) throws IOException {
+        try (FileOutputStream outputStream = new FileOutputStream(caminho)) {
+            workbook.write(outputStream);
+        }
     }
 }

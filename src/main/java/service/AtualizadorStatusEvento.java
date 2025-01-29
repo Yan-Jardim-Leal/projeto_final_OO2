@@ -1,5 +1,6 @@
 package service;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -52,7 +53,10 @@ public class AtualizadorStatusEvento {
                 evento.getHoraEvento().toLocalTime()
             );
             LocalDateTime dataHoraFim = dataHoraInicio.plus(evento.getDuracaoEvento());
-
+            
+            long segundosRestantes = Duration.between(agora, dataHoraFim).getSeconds();
+            System.out.println("[INFO] Atualizando evento " + evento.getId() + ": Tempo restante para atualização: " + segundosRestantes + "s | Novo status: EM ANDAMENTO");
+            
             if (agora.isAfter(dataHoraFim) && evento.getStatus() != EventoStatus.ENCERRADO) {
                 evento.setStatus(EventoStatus.ENCERRADO);
                 EventoManagerDao.editar(evento);

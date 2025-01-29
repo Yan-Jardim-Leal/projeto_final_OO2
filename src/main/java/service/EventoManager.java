@@ -16,19 +16,27 @@ public final class EventoManager { //Não ter o public significa que ela só é 
 	private EventoManager() {}
 	
 	// ==========================||      USUÁRIOS     ||========================== //
-	public static boolean participarEvento(User user, Evento evento) throws LoginException, SQLException {
+	public static boolean participarEvento(int eventoId) throws LoginException, SQLException {
 		LoginManager.verParticipante();
-		return EventoManagerDao.adicionarParticipanteEvento(user.getId(), evento.getId());
+		User user = LoginManager.getUsuario();
+		
+		return EventoManagerDao.adicionarParticipanteEvento(user.getId(), eventoId);
 	}
 	
-	public static boolean confirmarPresenca(User user, Evento evento) throws Exception {
+	public static boolean confirmarPresenca(int eventoId) throws Exception {
 		LoginManager.verParticipante();
-		return EventoManagerDao.confirmarPresencaEvento(user.getId(), evento.getId());
+		User user = LoginManager.getUsuario();
+		
+		//Verificar se está a uma hora do evento
+		
+		return EventoManagerDao.confirmarPresencaEvento(user.getId(), eventoId);
 	}
 	
-	public static boolean sairEvento(User user, Evento evento) throws Exception {
+	public static boolean sairEvento(int eventoId) throws Exception {
 		LoginManager.verParticipante();
-		return EventoManagerDao.sairParticipanteEvento(user.getId(), evento.getId());
+		User user = LoginManager.getUsuario();
+		
+		return EventoManagerDao.sairParticipanteEvento(user.getId(), eventoId);
 	}
 	
 	public static List<Evento> buscarEventosPorNomeCliente(String nome) throws Exception {
@@ -86,24 +94,26 @@ public final class EventoManager { //Não ter o public significa que ela só é 
 	    return EventoManagerDao.buscarEventosPorCategoria(categoria);
 	}
 	
-	public static void gerarRelatorioAdmin(Evento evento, String caminhoArquivo) throws Exception {
+	public static void gerarRelatorioAdmin(int eventoId, String caminhoArquivo) throws Exception {
 	    LoginManager.verAdmin();
 	    // Um relatório do administrador deve conter:
 	    // Todas as informações do evento
 	    // Todos os organizadores do evento
 	    // Todos os participantes do evento
 	    
-	    //XLSGenerator.gerarRelatorioEventos(eventos, caminhoArquivo);
+	    Evento evento = EventoManagerDao.getEventoPorId(eventoId);
+	    XLSGenerator.gerarRelatorioAdmin(evento, caminhoArquivo);
 	}
 	
-	public static void gerarRelatorioParticipante(Evento evento, String caminhoArquivo) throws Exception {
+	public static void gerarRelatorioParticipante(int eventoId, String caminhoArquivo) throws Exception {
 	    LoginManager.verParticipante();
 	    // Um relatório do administrador deve conter:
 	    // Todas as informações do evento
 	    // Todos os organizadores do evento
 	    // Presença confirmada (relação entre usuário e evento)
 	    
-	    //XLSGenerator.gerarRelatorioEventos(eventos, caminhoArquivo);
+	    Evento evento = EventoManagerDao.getEventoPorId(eventoId);
+	    XLSGenerator.gerarRelatorioParticipante(evento, LoginManager.getUsuario().getId(),caminhoArquivo);
 	}
 	
 	public static List<Evento> getEventosCadastradosAdministrador() throws Exception{
