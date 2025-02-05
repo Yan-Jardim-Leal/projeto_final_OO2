@@ -1,118 +1,111 @@
 package gui;
 
-import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
+import javax.swing.*;
 import javax.swing.text.MaskFormatter;
-import javax.swing.JTextField;
-import javax.swing.JRadioButton;
-import javax.swing.JToggleButton;
-import javax.swing.JList;
-import javax.swing.JFormattedTextField;
-import javax.swing.JPasswordField;
-import java.awt.Scrollbar;
-import javax.swing.JLabel;
-import java.awt.Font;
-
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import java.awt.TextField;
-import java.sql.Date;
-import java.text.ParseException;
-import java.awt.Button;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
+import java.awt.event.*;
 
 public class RegisterWindow extends JFrame {
+    private JPanel contentPane;
+    private JLabel lblNomeCompleto;
+    private JTextField textFieldNomeCompleto;
+    private JLabel lblEmail;
+    private JTextField textFieldEmail;
+    private JLabel lblSenha;
+    private JPasswordField passwordField;
+    private JLabel lblDataNascimento;
+    private JFormattedTextField formattedTextFieldDataNascimento;
+    private JLabel lblCpf;
+    private JFormattedTextField formattedTextFieldCpf;
+    private JButton btnRegistrar;
 
-	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JLabel lblNomeCompleto;
-	private JTextField textFieldNomeCompleto;
-	private JLabel lblEmail;
-	private JTextField textFieldEmail;
-	private JLabel lblSenha;
-	private JPasswordField passwordField;
-	private JLabel lblDataNascimento;
-	private JFormattedTextField formattedTextFieldDataNascimento;
-	private MaskFormatter mascaraData;
-	private JLabel lblCpf;
-	private JFormattedTextField formattedTextFieldCpf;
-	private MaskFormatter mascaraCpf;
-	private JButton btnRegistrar;
+    public RegisterWindow() {
+        setTitle("Registro de Usuário");
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(400, 350);
+        setLocationRelativeTo(null);
 
-	public RegisterWindow() throws ParseException {
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		this.setTitle("Sistema de Gerenciamento de Eventos - Registrar");
-		setBounds(100, 100, 450, 520);
-		setResizable(false);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		this.mascaraData = new MaskFormatter("##/##/####");
-		this.mascaraCpf = new MaskFormatter("###.###.###-##");
+        contentPane = new JPanel();
+        contentPane.setLayout(null);
 
-		setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		textFieldNomeCompleto = new JTextField();
-		textFieldNomeCompleto.setBounds(80, 59, 265, 29);
-		contentPane.add(textFieldNomeCompleto);
-		textFieldNomeCompleto.setColumns(10);
-		
-		textFieldEmail = new JTextField();
-		textFieldEmail.setBounds(79, 132, 265, 29);
-		contentPane.add(textFieldEmail);
-		textFieldEmail.setColumns(10);
-		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(79, 208, 265, 29);
-		contentPane.add(passwordField);
-		
-		lblNomeCompleto = new JLabel("Nome Completo");
-		lblNomeCompleto.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblNomeCompleto.setBounds(79, 33, 102, 14);
-		contentPane.add(lblNomeCompleto);
-		
-		lblEmail = new JLabel("E-Mail");
-		lblEmail.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblEmail.setBounds(78, 108, 46, 14);
-		contentPane.add(lblEmail);
-		
-		lblSenha = new JLabel("Senha");
-		lblSenha.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblSenha.setBounds(80, 188, 46, 14);
-		contentPane.add(lblSenha);
+        // Nome Completo
+        lblNomeCompleto = new JLabel("Nome Completo:");
+        lblNomeCompleto.setBounds(30, 30, 120, 25);
+        textFieldNomeCompleto = new JTextField();
+        textFieldNomeCompleto.setBounds(160, 30, 200, 25);
 
-		
-		formattedTextFieldDataNascimento = new JFormattedTextField(mascaraData);
-		formattedTextFieldDataNascimento.setBounds(80, 285, 265, 29);
-		contentPane.add(formattedTextFieldDataNascimento);
-		
-		lblDataNascimento = new JLabel("Data de Nascimento");
-		lblDataNascimento.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblDataNascimento.setBounds(80, 260, 117, 14);
-		contentPane.add(lblDataNascimento);
-		
-		formattedTextFieldCpf = new JFormattedTextField(mascaraCpf);
-		formattedTextFieldCpf.setBounds(80, 354, 265, 29);
-		contentPane.add(formattedTextFieldCpf);
-		
-		lblCpf = new JLabel("CPF");
-		lblCpf.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lblCpf.setBounds(78, 335, 46, 14);
-		contentPane.add(lblCpf);
-		
-		btnRegistrar = new JButton("Registrar");
-		btnRegistrar.setFont(new Font("Dialog", Font.PLAIN, 12));
-		btnRegistrar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		btnRegistrar.setBounds(158, 415, 100, 29);
-		contentPane.add(btnRegistrar);
+        // Email
+        lblEmail = new JLabel("Email:");
+        lblEmail.setBounds(30, 70, 120, 25);
+        textFieldEmail = new JTextField();
+        textFieldEmail.setBounds(160, 70, 200, 25);
 
-	}
+        // Senha
+        lblSenha = new JLabel("Senha:");
+        lblSenha.setBounds(30, 110, 120, 25);
+        passwordField = new JPasswordField();
+        passwordField.setBounds(160, 110, 200, 25);
+
+        // Data de Nascimento
+        lblDataNascimento = new JLabel("Data de Nascimento:");
+        lblDataNascimento.setBounds(30, 150, 120, 25);
+        try {
+            MaskFormatter dateMask = new MaskFormatter("##/##/####");
+            formattedTextFieldDataNascimento = new JFormattedTextField(dateMask);
+        } catch (Exception e) {
+            formattedTextFieldDataNascimento = new JFormattedTextField();
+        }
+        formattedTextFieldDataNascimento.setBounds(160, 150, 200, 25);
+
+        // CPF
+        lblCpf = new JLabel("CPF:");
+        lblCpf.setBounds(30, 190, 120, 25);
+        try {
+            MaskFormatter cpfMask = new MaskFormatter("###########");
+            formattedTextFieldCpf = new JFormattedTextField(cpfMask);
+        } catch (Exception e) {
+            formattedTextFieldCpf = new JFormattedTextField();
+        }
+        formattedTextFieldCpf.setBounds(160, 190, 200, 25);
+
+        // Botão de registro
+        btnRegistrar = new JButton("Registrar");
+        btnRegistrar.setBounds(160, 240, 120, 30);
+        btnRegistrar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String nome = textFieldNomeCompleto.getText();
+                String email = textFieldEmail.getText();
+                String senha = new String(passwordField.getPassword());
+                String dataNascimento = formattedTextFieldDataNascimento.getText();
+                String cpf = formattedTextFieldCpf.getText();
+
+                // Aqui você deve converter a data de nascimento e validar os dados conforme necessário.
+                // Em seguida, chame o método do UserManager para cadastrar o usuário.
+                try {
+                    // Exemplo:
+                    // Participante participante = new Participante(nome, senha, email, cpf, converterData(dataNascimento));
+                    // UserManager.cadastrarUsuario(participante);
+                    JOptionPane.showMessageDialog(null, "Registro realizado com sucesso!");
+                    dispose(); // fecha a janela após o cadastro
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao registrar: " + ex.getMessage());
+                }
+            }
+        });
+
+        // Adiciona os componentes ao painel
+        contentPane.add(lblNomeCompleto);
+        contentPane.add(textFieldNomeCompleto);
+        contentPane.add(lblEmail);
+        contentPane.add(textFieldEmail);
+        contentPane.add(lblSenha);
+        contentPane.add(passwordField);
+        contentPane.add(lblDataNascimento);
+        contentPane.add(formattedTextFieldDataNascimento);
+        contentPane.add(lblCpf);
+        contentPane.add(formattedTextFieldCpf);
+        contentPane.add(btnRegistrar);
+
+        setContentPane(contentPane);
+    }
 }

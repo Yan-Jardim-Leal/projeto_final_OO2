@@ -2,18 +2,27 @@ package service.main;
 
 import java.sql.SQLException;
 
+import javax.swing.SwingUtilities;
+
 import dao.BancoDados;
+import exceptions.CustomErrorWindow;
+import gui.LoginWindow;
 import service.AtualizadorStatusEvento;
-import service.EventoManager;
-import service.LoginManager;
 
 public class Main {
 
 	public static void main(String[] argumentos) throws Exception {
-		
 		int tentativas = 0;
 		boolean sucesso = false;
-
+		
+        // Define o handler global para exceções não tratadas
+        Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
+            // Garante que a exibição da GUI ocorra na thread de eventos do Swing
+            SwingUtilities.invokeLater(() -> {
+                new CustomErrorWindow(exception).setVisible(true);
+            });
+        });
+        
 		while (sucesso == false && tentativas < 3) {
 			
 			try {
@@ -30,22 +39,13 @@ public class Main {
 		}
 		
 		if (tentativas >= 3) {
-			System.out.println("Aplicação falhou em iniciar, não foi possível se conectar ao banco de dados.");
-			return;
+			throw new RuntimeException("Falha na conexão com o banco de dados após 3 tentativas.");
 		}
 		
-		LoginManager.login("yan2005leal@gmail.com", "senhalegal123@");
+		LoginWindow starterFrame = new LoginWindow();
+		starterFrame.setVisible(true);
 		
-		EventoManager.gerarRelatorioAdmin(54, "C:\\Users\\Yan\\Desktop\\Relatorio\\relatorioAdminCorreto.xls");
-		
-		System.out.println("Tudo certo!");
-		
-		LoginManager.logOff();
-		//LoginManager.login("participante2.evento@teste.com", "senha456");
-		
-		//EventoManager.participarEvento(1);
-		//System.out.println("Participando do evento!");
-		
+
 		
 		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
 		    AtualizadorStatusEvento.pararAtualizacao();
@@ -57,11 +57,17 @@ public class Main {
 		}));
 		
 	}
-	
-	// "yan2005leal@gmail.com", "senhalegal123@"
-    // "participante1.evento@teste.com", "senha123"
-    // "participante2.evento@teste.com", "senha456"
-    // "participante3.evento@teste.com", "senha789"
 }
 
+//LoginManager.login("yan2005leal@gmail.com", "senhalegal123@");
+//EventoManager.gerarRelatorioAdmin(54, "C:\\Users\\Yan\\Desktop\\Relatorio\\relatorioAdminCorreto.xls");
+//System.out.println("Tudo certo!");
+//LoginManager.logOff();
+//LoginManager.login("participante2.evento@teste.com", "senha456");
+//EventoManager.participarEvento(1);
+//System.out.println("Participando do evento!");
+// "yan2005leal@gmail.com", "senhalegal123@"
+// "participante1.evento@teste.com", "senha123"
+// "participante2.evento@teste.com", "senha456"
+// "participante3.evento@teste.com", "senha789"
 
