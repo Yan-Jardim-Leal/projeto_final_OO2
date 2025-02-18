@@ -2,6 +2,8 @@ package entities;
 
 import java.sql.Date;
 
+import exceptions.CpfInvalidoException;
+
 public final class Participante extends User {
 	private String cpf;
 	private Date dataNascimento;
@@ -10,7 +12,7 @@ public final class Participante extends User {
 		super(id, nome, senha, email, UsuarioTipo.DEFAULT);
 		
 		if (validarCPF(cpfNumbers(cpf.toCharArray())) == false)
-			throw new Exception("CPF INVÁLIDO");
+			throw new CpfInvalidoException();
 		
 		this.cpf = cpf;
 		this.dataNascimento = dataNascimento;
@@ -75,7 +77,7 @@ public final class Participante extends User {
 			return false;
 		}
 			
-		System.out.println("CPF validado com sucesso!");
+		//System.out.println("CPF validado com sucesso!");
 		return true;
 	}
 	
@@ -86,10 +88,5 @@ public final class Participante extends User {
 	public Date getDataNascimento() {
 		return dataNascimento;
 	}
-
-	
-	
-	
-	
 	
 }

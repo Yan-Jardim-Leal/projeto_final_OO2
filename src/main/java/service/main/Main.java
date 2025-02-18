@@ -2,10 +2,10 @@ package service.main;
 
 import java.sql.SQLException;
 
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import dao.BancoDados;
-import exceptions.CustomErrorWindow;
 import gui.LoginWindow;
 import service.AtualizadorStatusEvento;
 
@@ -19,7 +19,8 @@ public class Main {
         Thread.setDefaultUncaughtExceptionHandler((thread, exception) -> {
             // Garante que a exibição da GUI ocorra na thread de eventos do Swing
             SwingUtilities.invokeLater(() -> {
-                new CustomErrorWindow(exception).setVisible(true);
+            	JOptionPane.showMessageDialog(null, "Ocorreu um erro grave ao se conectar com o Banco de Dados,\nverifique sua conexão com o servidor e tente novamente mais tarde.","Erro Grave", JOptionPane.ERROR_MESSAGE);
+            	System.exit(0);
             });
         });
         
@@ -66,6 +67,9 @@ public class Main {
 //LoginManager.login("participante2.evento@teste.com", "senha456");
 //EventoManager.participarEvento(1);
 //System.out.println("Participando do evento!");
+// 
+// "Rafael@gmail.com", "123"
+// "Clarisse@leni.com", "123"
 // "yan2005leal@gmail.com", "senhalegal123@"
 // "participante1.evento@teste.com", "senha123"
 // "participante2.evento@teste.com", "senha456"

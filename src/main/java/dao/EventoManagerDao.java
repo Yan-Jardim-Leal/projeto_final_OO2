@@ -31,7 +31,7 @@ public final class EventoManagerDao {
 		conexaoBD = conn;
 	}
 	
-	public static boolean adicionar(Evento evento) throws SQLException {
+	public static boolean adicionar(Evento evento) throws Exception {
 	    PreparedStatement statement = null;
 	    try {
 	        conexaoBD.setAutoCommit(false); // Inicia transação
@@ -104,7 +104,7 @@ public final class EventoManagerDao {
 	                }
 
 	            } else {
-	                throw new SQLException("Nenhum ID gerado para o evento");
+	                throw new Exception("Nenhum ID gerado para o evento");
 	            }
 	        }
 
@@ -121,21 +121,45 @@ public final class EventoManagerDao {
 	    }
 	}
 	
-	public static boolean adicionarParticipanteEvento(int participanteId, int eventoId) throws SQLException {
-	    PreparedStatement statement = null;
-	    try {
-	        String sql = "INSERT INTO participante_evento (participante_id, evento_id, confirmou_presenca) VALUES (?, ?, ?)";
-	        statement = conexaoBD.prepareStatement(sql);
-	        statement.setInt(1, participanteId);
-	        statement.setInt(2, eventoId);
-	        statement.setBoolean(3, false);
-	        return statement.executeUpdate() > 0; // Não gerencia transação!
-	    } catch (SQLIntegrityConstraintViolationException erro) {
-	    	return false;
-	    } finally {
-	        BancoDados.finalizarStatement(statement);
-	    }
-	}
+    public static boolean adicionarParticipanteEvento(int participanteId, int eventoId) throws Exception {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            // 1. Obter a capacidade máxima do evento e o número atual de participantes
+            String sqlCapacidade = "SELECT capacidade_maxima, (SELECT COUNT(*) FROM participante_evento WHERE evento_id = ?) as participantes_atual FROM evento WHERE id = ?";
+            statement = conexaoBD.prepareStatement(sqlCapacidade);
+            statement.setInt(1, eventoId);
+            statement.setInt(2, eventoId);
+            resultSet = statement.executeQuery();
+
+            int capacidadeMaxima = 0;
+            int participantesAtual = 0;
+            if (resultSet.next()) {
+                capacidadeMaxima = resultSet.getInt("capacidade_maxima");
+                participantesAtual = resultSet.getInt("participantes_atual");
+            }
+
+            if (participantesAtual >= capacidadeMaxima) {
+                throw new Exception("Capacidade máxima do evento excedida.");
+            }
+
+            // 2. Inserir o participante se a capacidade não for excedida
+            String sqlInsert = "INSERT INTO participante_evento (participante_id, evento_id, confirmou_presenca) VALUES (?, ?, ?)";
+            BancoDados.finalizarStatement(statement); // Fechar o statement anterior
+            statement = conexaoBD.prepareStatement(sqlInsert);
+            statement.setInt(1, participanteId);
+            statement.setInt(2, eventoId);
+            statement.setBoolean(3, false);
+
+            return statement.executeUpdate() > 0; // Não gerencia transação!
+
+        } catch (SQLIntegrityConstraintViolationException erro) {
+            return false; // Retorna false em caso de violação de integridade (participante já inscrito)
+        } finally {
+            BancoDados.finalizarResultSet(resultSet);
+            BancoDados.finalizarStatement(statement);
+        }
+    }
 
 	public static boolean adicionarAdministradorEvento(int adminId, int eventoId) throws SQLException {
 	    PreparedStatement statement = null;
@@ -677,34 +701,39 @@ public final class EventoManagerDao {
 	}
 	
 	public static List<Evento> getEventosCadastrados(int userId) throws Exception {
-	    List<Evento> eventos = new ArrayList<>();
-	    PreparedStatement statement = null;
-	    ResultSet resultado = null;
+	        List<Evento> eventos = new ArrayList<>();
+	        PreparedStatement statement = null;
+	        ResultSet resultado = null;
 
-	    try {
-	        String sql = "SELECT e.* FROM evento e " +
-	                     "LEFT JOIN administrador_evento ae ON e.id = ae.evento_id " +
-	                     "LEFT JOIN participante_evento pe ON e.id = pe.evento_id " +
-	                     "WHERE ae.admin_id = ? OR pe.participante_id = ?";
-	        
-	        statement = conexaoBD.prepareStatement(sql);
-	        statement.setInt(1, userId);
-	        statement.setInt(2, userId);
+	        try {
+	            String sql = "(SELECT e.* FROM evento e " +
+	                         "INNER JOIN administrador_evento ae ON e.id = ae.evento_id " +
+	                         "WHERE ae.admin_id = ? ) " +
+	                         "UNION " +
+	                         "(SELECT e.* FROM evento e " +
+	                         "INNER JOIN participante_evento pe ON e.id = pe.evento_id " +
+	                         "WHERE pe.participante_id = ?)";
 
-	        resultado = statement.executeQuery();
 
-	        // Mapeia os resultados para objetos Evento
-	        while (resultado.next()) {
-	            Evento evento = mapearEventoDoResultSet(resultado);
-	            eventos.add(evento);
+	            statement = conexaoBD.prepareStatement(sql);
+	            statement.setInt(1, userId);
+	            statement.setInt(2, userId);
+
+
+	            resultado = statement.executeQuery();
+
+	            // Mapeia os resultados para objetos Evento
+	            while (resultado.next()) {
+	                Evento evento = mapearEventoDoResultSet(resultado);
+	                eventos.add(evento);
+	            }
+
+	            return eventos;
+	        } finally {
+	            BancoDados.finalizarResultSet(resultado);
+	            BancoDados.finalizarStatement(statement);
 	        }
-
-	        return eventos;
-	    } finally {
-	        BancoDados.finalizarResultSet(resultado);
-	        BancoDados.finalizarStatement(statement);
 	    }
-	}
 	
 	// ==========================|| ================= ||========================== //
 	

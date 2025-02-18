@@ -1,6 +1,8 @@
 package service;
 
 import java.sql.SQLException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,35 +11,65 @@ import entities.Evento;
 import entities.EventoCategoria;
 import entities.EventoStatus;
 import entities.User;
+import entities.UsuarioTipo;
 import exceptions.LoginException;
 
 public final class EventoManager { //Não ter o public significa que ela só é acessível dentro do Package Service
 	
 	private EventoManager() {}
 	
-	// ==========================||      USUÁRIOS     ||========================== //
-	public static boolean participarEvento(int eventoId) throws LoginException, SQLException {
-		LoginManager.verParticipante();
-		User user = LoginManager.getUsuario();
-		
-		return EventoManagerDao.adicionarParticipanteEvento(user.getId(), eventoId);
+	// ==========================||      PUBLICAS     ||========================== //
+	
+	public static Evento getEventoPorId(int id) throws Exception {
+		return EventoManagerDao.getEventoPorId(id);
 	}
 	
-	public static boolean confirmarPresenca(int eventoId) throws Exception {
-		LoginManager.verParticipante();
+	public static boolean participarEvento(int eventoId) throws Exception {
 		User user = LoginManager.getUsuario();
 		
-		//Verificar se está a uma hora do evento
-		
-		return EventoManagerDao.confirmarPresencaEvento(user.getId(), eventoId);
+		if (user.getTipo() == UsuarioTipo.ADMIN)
+			return EventoManagerDao.adicionarAdministradorEvento(user.getId(), eventoId);
+		else
+			return EventoManagerDao.adicionarParticipanteEvento(user.getId(), eventoId);
 	}
 	
 	public static boolean sairEvento(int eventoId) throws Exception {
-		LoginManager.verParticipante();
 		User user = LoginManager.getUsuario();
 		
-		return EventoManagerDao.sairParticipanteEvento(user.getId(), eventoId);
+		if (user.getTipo() == UsuarioTipo.ADMIN)
+			return EventoManagerDao.sairAdministradorEvento(user.getId(), eventoId);
+		else
+			return EventoManagerDao.sairParticipanteEvento(user.getId(), eventoId);
+		
 	}
+	
+	// ==========================||      USUÁRIOS     ||========================== //
+	
+	public static boolean getPresenca(int eventoId) throws SQLException, LoginException {
+		LoginManager.verParticipante();
+		return EventoManagerDao.getEventoConfirmado(LoginManager.getUsuario().getId(), eventoId);
+	}
+	
+	public static boolean confirmarPresenca(int eventoId) throws Exception {		LoginManager.verParticipante();
+		User user = LoginManager.getUsuario();
+
+		Evento evento = getEventoPorId(eventoId);
+		if (evento == null) {
+			return false;
+		}
+
+		LocalDateTime dataHoraEvento = LocalDateTime.of(evento.getDataEvento().toLocalDate(), evento.getHoraEvento().toLocalTime());
+		LocalDateTime now = LocalDateTime.now();
+		Duration timeUntilEvent = Duration.between(now, dataHoraEvento);
+
+		if (timeUntilEvent.isNegative() || timeUntilEvent.toHours() <= 8) {
+			return EventoManagerDao.confirmarPresencaEvento(user.getId(), eventoId);
+		} else {
+			return false;
+		}
+	}
+	
+
 	
 	public static List<Evento> buscarEventosPorNomeCliente(String nome) throws Exception {
 		LoginManager.verParticipante();
@@ -62,6 +94,7 @@ public final class EventoManager { //Não ter o public significa que ela só é 
 		List<Evento> listaFiltrada = new ArrayList<Evento>();
 		
 		for (Evento evento : listaEvento) {
+			//System.out.println("EVENTO QUE RECEBI:"+evento.getId());
 			if (evento.getStatus() == EventoStatus.ABERTO)
 				listaFiltrada.add(evento);
 		}
@@ -69,7 +102,8 @@ public final class EventoManager { //Não ter o public significa que ela só é 
 		return listaFiltrada;
 	}
 	// ==========================||  ADMINISTRADORES  ||========================== //
-	public static boolean criarEvento(Evento evento) throws SQLException, LoginException {
+	
+	public static boolean criarEvento(Evento evento) throws Exception {
 		LoginManager.verAdmin();
 		return EventoManagerDao.adicionar(evento);
 	}
