@@ -32,7 +32,7 @@ Parte Interface: Rafael Adonis Menon & Gabriel Capri <br>
 
 		CREATE TABLE participante (
 	    		id INT PRIMARY KEY REFERENCES usuario(id),
-	    		cpf VARCHAR(11) UNIQUE NOT NULL,
+	    		cpf VARCHAR(14) UNIQUE NOT NULL,
 	    		data_nascimento DATE NOT NULL
 		);
 
